@@ -1,12 +1,15 @@
 {
   "name": "xrosy",
   "version": "0.1.0",
-  "main": "./src/main.js",
   "author": "ChenZhenyuan <jason@chenzhenyuan.com>",
   "license": "MIT",
   "description": "xrosy generator",
   "repository": "https://github.com/xrosy/generator",
   "private": false,
+  "main": "./src/main.js",
+  "bin": {
+    "xrosy": "bin/xrosy"
+  },
   "dependencies": {
     "axios": "^0.18.0",
     "react": "^16.8.2",
