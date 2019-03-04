@@ -1,6 +1,7 @@
 
-const xrosy       = require('xrosy-command');
-const packageInfo = require('../package.json');
+const xrosy           = require('xrosy-command');
+const { devActivity } = require('./wp.js');
+const packageInfo     = require('../package.json');
 
 
 
@@ -10,7 +11,7 @@ xrosy
   .option('-d, --dist-dir      <DIST_DIR_NAME>' , '指定打包输出的目录。（默认：--dist-dir=dist）')
   .option('-p, --port          [PORT]'          , '设置映射的端口号 (默认: 9090)')
   .option('-m, --env           <ENV_NAME>'      , '手动指定环境变量标识')
-  .action(require('./model/dev'))
+  .action(devActivity)
 
 
 // xrosy

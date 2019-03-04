@@ -11,7 +11,7 @@
     "xrosy": "bin/xrosy"
   },
   "dependencies": {
-    "webpack": "^4.29.3",
+    "webpack": "^4.29.6",
     "webpack-cli": "^3.2.3",
     "xrosy-command": "^0.1.1"
   },

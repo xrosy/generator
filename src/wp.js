@@ -1,12 +1,11 @@
+const webpack = require('webpack');
 const {
   CONST_PORT,
   CONST_DIST_PATH,
   CONST_ENV
-} = require('../defConf.js');
+} = require('./defConf.js');
 
-
-
-module.exports = (projectPath, args)=>{
+exports.devActivity = (projectPath, args)=>{
 
   const {
       port     = CONST_PORT,
@@ -14,6 +13,9 @@ module.exports = (projectPath, args)=>{
       env      = CONST_ENV,
     } = args;
 
+    console.log('mode:dev');
 
+    webpack({
 
+    });
 }
