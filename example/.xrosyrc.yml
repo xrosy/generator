@@ -1,0 +1,6 @@
+apps:
+  - home
+  - static
+  - assets
+  - cms
+  - sso

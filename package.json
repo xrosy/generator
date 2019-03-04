@@ -12,7 +12,7 @@
   },
   "scripts": {
     "dev": "babel src -d release && xrosy dev example/single-app-page",
-    "build:min": "babel src -d release --presets minify && xrosy dev example/single-app-page",
+    "build:min": "babel src -d release --presets minify && xrosy dev example",
     "deploy": "git add . && git commit -m \"$(date)\" && git push",
     "d": "yarn deploy"
   },

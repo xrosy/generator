@@ -10,16 +10,15 @@ const {
   CONST_ENV
 } = require('../defConf.js');
 
-
 const wpInstance = ({ port, env, distDir, sourceWorkDir = '.' }) => {
-  const defConf    = wpConf({projectDir: sourceWorkDir});
+  const _CONFIGS_ = wpConf({projectDir: sourceWorkDir});
 
-  console.log(defConf);
+  console.log(_CONFIGS_);
 
-  const wpCompiler = webpack(defConf);
-  wpCompiler.run((err, stats)=>{});
+  // const wpCompiler = webpack(_CONFIGS_);
+  // wpCompiler.run((err, stats)=>{});
 
-    /* Webpack configs */
+  /* Webpack configs */
   // const wpCompiler = webpack({
   //   context: conf.getProjectContext(),
   //   entry: './app.js',
@@ -63,8 +62,6 @@ exports.devActivity = (sourceWorkDir, args)=>{
       sourceWorkDir,
     });
 }
-
-
 
 
 exports.buildActivity = ( sourceWorkDir, args) => {

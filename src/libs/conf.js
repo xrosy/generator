@@ -1,38 +1,51 @@
 import path from 'path';
 
 
-
-
 class XrosyConf {
   constructor(settingsObj) {
 
     this.__ = { ...settingsObj };
 
-    this.projectContext = this.getProjectContext();
-
-    console.log(this);
+    this.projectContext    = this.getProjectContext();
+    this.entriesObj        = this.getEntriesObj();
+    this.ModuleRules       = this.getModuleRules();
+    this.resolveExtensions = this.getResolveExtensions();
   }
 
   getProjectContext() {
     return path.resolve(this.__.projectDir);
   }
 
-  getExtensions() {
+  getResolveExtensions() {
     return ['.js', '.jsx'];
   }
 
-  getLoaders() {
+  getModuleRules() {
     return [{
       test: /\.js$/,
       exclude: /node_modules/,
       loader: "babel-loader"
-    }]
+    }];
   }
 
-
+  getEntriesObj() {}
 }
 
 export default (...args)=>{
-  return new XrosyConf(...args);
+  const settings = new XrosyConf(...args);
+
+  /* Generate configs Object */
+  return {
+    context: settings.projectContext,
+
+    entry  : settings.entriesObj,
+
+    output : {},
+
+    resolve: {
+      extensions: settings.resolveExtensions,
+    }
+
+  };
 }
 
