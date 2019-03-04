@@ -6,16 +6,24 @@
   "description": "xrosy generator",
   "repository": "https://github.com/xrosy/generator",
   "private": false,
-  "main": "./src/main.js",
+  "main": "./release/main.js",
   "bin": {
-    "xrosy": "bin/xrosy"
+    "xrosy": "sbin/xrosy"
+  },
+  "scripts": {
+    "build": "babel src -d release --presets minify",
+    "deploy": "git add . && git commit -m \"$(date)\" && git push"
   },
   "dependencies": {
     "webpack": "^4.29.6",
     "webpack-cli": "^3.2.3",
-    "xrosy-command": "^0.1.1"
+    "xrosy-command": "^0.1.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "babel-preset-minify": "^0.5.0",
     "yarn": "^1.13.0"
   }
 }

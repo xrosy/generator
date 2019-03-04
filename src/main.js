@@ -1,7 +1,10 @@
 
 const xrosy           = require('xrosy-command');
-const { devActivity } = require('./wp.js');
 const packageInfo     = require('../package.json');
+const {
+  devActivity,
+  buildActivity,
+} = require('./wp.js');
 
 
 
@@ -14,14 +17,14 @@ xrosy
   .action(devActivity)
 
 
-// xrosy
-//   .command('build <project>')
-//   .description('编译工程')
-//   .option('-m, --env           <env name>', '手动指定环境变量标识')
-//   .option('-m, --app-names     <app_names>', '指定需要打包的app模块名称。（默认: --app-name=all）')
-//   .option('-d, --dist-dir      <dist_path>', '指定打包输出的目录。（默认：--dist-dir=dist）')
-//   .action((env) => env)
-//   .on('--help', () => {});
+xrosy
+  .command('build <PROJECT_PATH>')
+  .description('编译工程')
+  .option('-d, --dist-dir      <dist_path>', '指定打包输出的目录。（默认：--dist-dir=dist）')
+  .option('-e, --env           <env name>', '手动指定环境变量标识')
+  .option('-N, --app-names     <app_names>', '指定需要打包的app模块名称。（默认: --app-name=all）')
+  .action(buildActivity)
+  .on('--help', () => {});
 
 
 xrosy

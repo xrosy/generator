@@ -2,5 +2,11 @@
 
 [xrosy.com](http://xrosy.com)内部使用的项目编译工具
 
-## UPDATE LOGs
-📅
+
+### Usage
+Add the environment variable for the Terminal.
+```shell
+export PATH=$PWD/sbin:$PATH
+```
+
+### UPDATE LOGs

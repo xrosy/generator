@@ -1,0 +1,1 @@
+"use strict";var _require=require("../defConf.js"),CONST_PORT=_require.CONST_PORT,CONST_DIST_PATH=_require.CONST_DIST_PATH,CONST_ENV=_require.CONST_ENV;module.exports=function(a,b){var c=b.port,d=void 0===c?CONST_PORT:c,e=b.distDir,f=void 0===e?CONST_DIST_PATH:e,g=b.env,h=void 0===g?CONST_ENV:g};
