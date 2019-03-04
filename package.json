@@ -12,7 +12,8 @@
   },
   "scripts": {
     "build": "babel src -d release --presets minify",
-    "deploy": "git add . && git commit -m \"$(date)\" && git push"
+    "deploy": "git add . && git commit -m \"$(date)\" && git push",
+    "d": "yarn deploy"
   },
   "dependencies": {
     "webpack": "^4.29.6",
