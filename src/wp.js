@@ -1,3 +1,4 @@
+const path    = require('path');
 const webpack = require('webpack');
 const utils   = require('./utils');
 const {
@@ -17,7 +18,13 @@ const wpInstance = ({
     throw Error('not setting source work directry')
   }
 
+  /* Webpack configs */
   const wpCompiler = webpack({
+    entry: "./app/entry",
+    output: {
+      path: path.resolve(__dirname, "dist"),
+      filename: "bundle.js",
+    }
   });
 
   console.log("sourceWorkDir:", sourceWorkDir);
@@ -28,8 +35,6 @@ const wpInstance = ({
     // console.log('stats:', stats);
   });
 }
-
-
 
 
 exports.devActivity = (sourceWorkDir, args)=>{
