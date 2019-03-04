@@ -11,20 +11,11 @@
     "xrosy": "bin/xrosy"
   },
   "dependencies": {
-    "axios": "^0.18.0",
-    "react": "^16.8.2",
-    "react-dom": "^16.8.2",
-    "react-router": "^4.3.1",
-    "react-router-dom": "^4.3.1"
-  },
-  "devDependencies": {
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.13.0",
-    "eslint-config-zals": "^0.1.6",
-    "express": "^4.16.4",
-    "stylelint": "^9.10.1",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3",
+    "xrosy-command": "^0.1.1"
+  },
+  "devDependencies": {
     "yarn": "^1.13.0"
   }
 }
