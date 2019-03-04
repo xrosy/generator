@@ -1,10 +1,12 @@
 
 const xrosy           = require('xrosy-command');
 const packageInfo     = require('../package.json');
+
+
 const {
   devActivity,
   buildActivity,
-} = require('./wp.js');
+} = require('./libs/wp.js');
 
 
 
