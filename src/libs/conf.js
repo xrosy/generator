@@ -1,6 +1,5 @@
 import path from 'path';
 
-
 class XrosyConf {
   constructor(settingsObj) {
 
@@ -11,6 +10,9 @@ class XrosyConf {
     this.ModuleRules       = this.getModuleRules();
     this.resolveExtensions = this.getResolveExtensions();
   }
+
+  getEntriesObj() {}
+
 
   getProjectContext() {
     return path.resolve(this.__.projectDir);
@@ -27,8 +29,6 @@ class XrosyConf {
       loader: "babel-loader"
     }];
   }
-
-  getEntriesObj() {}
 }
 
 export default (...args)=>{

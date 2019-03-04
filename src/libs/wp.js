@@ -11,36 +11,22 @@ const {
 } = require('../defConf.js');
 
 const wpInstance = ({ port, env, distDir, sourceWorkDir = '.' }) => {
-  const _CONFIGS_ = wpConf({projectDir: sourceWorkDir});
+  const _CONFIGS_ = wpConf({
+    env,
+    port,
+    distDir,
+    projectDir: sourceWorkDir,
+  });
 
   console.log(_CONFIGS_);
 
+  /**
+   * Webpack configs
+   */
   // const wpCompiler = webpack(_CONFIGS_);
   // wpCompiler.run((err, stats)=>{});
 
-  /* Webpack configs */
-  // const wpCompiler = webpack({
-  //   context: conf.getProjectContext(),
-  //   entry: './app.js',
-  //   output: {
-  //     filename: "bundle.js",
-  //     path: path.resolve(conf.getProjectContext(), 'dist'),
-  //   },
 
-  //   resolve: {
-  //     extensions: conf.getExtensions()
-  //   },
-
-  //   module: {
-  //     rules: conf.getLoaders(),
-  //   }
-  // });
-
-  // /* ------------------------ */
-  // wpCompiler.run((err, stats)=>{
-  //   // console.log('ERR:', err);
-  //   // console.log('stats:', stats);
-  // });
 }
 
 
