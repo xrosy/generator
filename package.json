@@ -1,11 +1,16 @@
 {
-  "name": "xrosy",
+  "name": "@xrosy/generator",
   "version": "0.1.0",
   "author": "ChenZhenyuan <jason@chenzhenyuan.com>",
   "license": "MIT",
-  "description": "xrosy generator",
+  "description": "the generator of xrosy.",
   "repository": "https://github.com/xrosy/generator",
   "private": false,
+  "keywords": [
+    "xrosy",
+    "ziluosha",
+    "generator"
+  ],
   "main": "./release/index.js",
   "bin": {
     "xrosy": "bin/xrosy"
