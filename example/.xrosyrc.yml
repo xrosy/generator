@@ -1,0 +1,5 @@
+
+engine : react
+
+entries:
+  - src/apps

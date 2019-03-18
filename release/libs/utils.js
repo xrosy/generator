@@ -1,1 +1,5 @@
-"use strict";exports.typeOf=function(a){return Object.prototype.toString.call(a).slice(8,-1).toLowerCase()};
+"use strict";
+
+exports.typeOf = function (obj) {
+  return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
+};

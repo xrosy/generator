@@ -13,7 +13,7 @@ const {
 xrosy
   .command('dev <PROJECT_PATH>')
   .description('开发模式')
-  .option('-d, --dist-dir      <DIST_DIR_NAME>' , '指定打包输出的目录。（默认：--dist-dir=dist）')
+  // .option('-d, --dist-dir      <DIST_DIR_NAME>' , '指定打包输出的目录。（默认：--dist-dir=dist）')
   .option('-p, --port          [PORT]'          , '设置映射的端口号 (默认: 9090)')
   .option('-m, --env           <ENV_NAME>'      , '手动指定环境变量标识')
   .action(devActivity)
