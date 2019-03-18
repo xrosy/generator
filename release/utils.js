@@ -1,1 +1,0 @@
-"use strict";exports.typeof=function(a){return Object.prototype.toString.call(a).slice(8,-1).toLowerCase()};

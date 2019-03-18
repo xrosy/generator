@@ -109,12 +109,12 @@ var getProjectContext = function getProjectContext() {
 
 var _default = function _default(_ref) {
   var projectPath = _ref.projectPath;
-  console.log('projectPath:', getProjectContext(projectPath));
+  var context = getProjectContext(projectPath);
   /* Generate configs Object */
 
   return {
+    context: context,
     mode: "none",
-    context: "/Users/jason/workspace/xrosy-generator/example",
     entry: ["./src/apps/admin/main"],
     output: {
       path: "/Users/jason/workspace/xrosy-generator/example/build",

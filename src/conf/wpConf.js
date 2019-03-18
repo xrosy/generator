@@ -78,9 +78,7 @@ const getProjectContext = (targetPath = '.') => {
     return path.resolve(targetPath);
 }
 
-export default ({
-    projectPath
-}) => {
+export default ({ projectPath }) => {
     const context = getProjectContext(projectPath);
 
     /* Generate configs Object */

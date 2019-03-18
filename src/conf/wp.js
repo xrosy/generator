@@ -5,19 +5,18 @@ import wpConf  from "../conf/wpConf.js";
 
 const { CONST_PORT, CONST_DIST_PATH, CONST_ENV } = require("../defConf.js");
 
+
+
 const wpInstance = ({ port, env, distDir, sourceWorkDir = "." }) => {
-  /**
-   * Webpack configs
-   */
+
+  /* Webpack configs */
   const __CONFIGS__ = wpConf({ env, port, distDir, projectPath: sourceWorkDir });
+
   const wpCompiler = webpack(__CONFIGS__);
 
   const wpWatcher = wpCompiler.run((err, stats) => {
-    // const stdout = stats.toString('verbose');
 
-    // console.log(stats.toJson('verbose'));
-
-    const stdout = stats.toString({
+    const stdoutConf = stats.toString({
       stats: {
         // 未定义选项时，stats 选项的备用值(fallback value)（优先级高于 webpack 本地默认值）
         all: undefined,
@@ -128,10 +127,14 @@ const wpInstance = ({ port, env, distDir, sourceWorkDir = "." }) => {
       }
     });
 
-    process.stdout.write(stdout);
+    process.stdout.write(stdoutConf);
   });
 };
 
+
+
+
+/* -------------------------------------------------------------------------- */
 
 /*  */
 exports.buildActivity = (sourceWorkDir, arws) => {};

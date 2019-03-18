@@ -6,7 +6,7 @@ const packageInfo     = require('../package.json');
 const {
   devActivity,
   buildActivity,
-} = require('./libs/wp.js');
+} = require('./conf/wp.js');
 
 
 
