@@ -1,13 +1,12 @@
 import path    from "path";
 import webpack from "webpack";
 import utils   from "./utils.js";
-import wpConf  from "../conf/wpConf.js";
-
-const { CONST_PORT, CONST_DIST_PATH, CONST_ENV } = require("../defConf.js");
-
+import wpConf  from "./conf/wpConf.js";
+import { CONST_PORT, CONST_DIST_PATH, CONST_ENV } from require("./defConf.js");
 
 
-const wpInstance = ({ port, env, distDir, sourceWorkDir = "." }) => {
+
+const wpAgent = ({ port, env, distDir, sourceWorkDir = "." }) => {
 
   /* Webpack configs */
   const __CONFIGS__ = wpConf({ env, port, distDir, projectPath: sourceWorkDir });
@@ -132,8 +131,6 @@ const wpInstance = ({ port, env, distDir, sourceWorkDir = "." }) => {
 };
 
 
-
-
 /* -------------------------------------------------------------------------- */
 
 /*  */
@@ -144,5 +141,5 @@ exports.buildActivity = (sourceWorkDir, arws) => {};
 exports.devActivity = (sourceWorkDir, args) => {
   const { env, port = CONST_PORT } = args;
 
-  wpInstance({ sourceWorkDir, port, env });
+  wpAgent({ sourceWorkDir, port, env });
 };

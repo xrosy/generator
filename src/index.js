@@ -1,13 +1,7 @@
 
-const xrosy           = require('xrosy-command');
-const packageInfo     = require('../package.json');
-
-
-const {
-  devActivity,
-  buildActivity,
-} = require('./conf/wp.js');
-
+import xrosy from 'xrosy-command';
+import packageInfo from '../package.json';
+import { devActivity, buildActivity } from "./webpackProxy.js";
 
 
 xrosy
