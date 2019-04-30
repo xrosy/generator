@@ -1,19 +1,2 @@
-"use strict";
-
-var xrosy = require('xrosy-command');
-
-var packageInfo = require('../package.json');
-
-var _require = require('./libs/wp.js'),
-    devActivity = _require.devActivity,
-    buildActivity = _require.buildActivity;
-
-xrosy.command('dev <PROJECT_PATH>').description('开发模式') // .option('-d, --dist-dir      <DIST_DIR_NAME>' , '指定打包输出的目录。（默认：--dist-dir=dist）')
-.option('-p, --port          [PORT]', '设置映射的端口号 (默认: 9090)').option('-m, --env           <ENV_NAME>', '手动指定环境变量标识').action(devActivity);
-xrosy.command('build <PROJECT_PATH>').description('编译工程').option('-d, --dist-dir      <dist_path>', '指定打包输出的目录。（默认：--dist-dir=dist）').option('-e, --env           <env name>', '手动指定环境变量标识').option('-N, --app-names     <app_names>', '指定需要打包的app模块名称。（默认: --app-name=all）').action(buildActivity).on('--help', function () {});
-xrosy.version(packageInfo.version, '-v, --version', "\u8F93\u51FA\u7248\u672C\u53F7 (v".concat(packageInfo.version, ")")).parse(process.argv);
-/* ---- */
-
-if (!process.argv.slice(2).length) {
-  xrosy.help();
-}
+"use strict";var _command=_interopRequireDefault(require("@xrosy/command")),_package=_interopRequireDefault(require("../package.json")),_webpackProxy=require("./webpackProxy.js");function _interopRequireDefault(a){return a&&a.__esModule?a:{default:a}}_command["default"].command("dev <PROJECT_PATH>").description("\u5F00\u53D1\u6A21\u5F0F")// .option('-d, --dist-dir      <DIST_DIR_NAME>' , '指定打包输出的目录。（默认：--dist-dir=dist）')
+.option("-p, --port          [PORT]","\u8BBE\u7F6E\u6620\u5C04\u7684\u7AEF\u53E3\u53F7 (\u9ED8\u8BA4: 9090)").option("-m, --env           <ENV_NAME>","\u624B\u52A8\u6307\u5B9A\u73AF\u5883\u53D8\u91CF\u6807\u8BC6").action(_webpackProxy.devActivity),_command["default"].command("build <PROJECT_PATH>").description("\u7F16\u8BD1\u5DE5\u7A0B").option("-d, --dist-dir      <dist_path>","\u6307\u5B9A\u6253\u5305\u8F93\u51FA\u7684\u76EE\u5F55\u3002\uFF08\u9ED8\u8BA4\uFF1A--dist-dir=dist\uFF09").option("-e, --env           <env name>","\u624B\u52A8\u6307\u5B9A\u73AF\u5883\u53D8\u91CF\u6807\u8BC6").option("-N, --app-names     <app_names>","\u6307\u5B9A\u9700\u8981\u6253\u5305\u7684app\u6A21\u5757\u540D\u79F0\u3002\uFF08\u9ED8\u8BA4: --app-name=all\uFF09").action(_webpackProxy.buildActivity).on("--help",function(){}),_command["default"].version(_package["default"].version,"-v, --version","\u8F93\u51FA\u7248\u672C\u53F7 (v".concat(_package["default"].version,")")).parse(process.argv),process.argv.slice(2).length||_command["default"].help();

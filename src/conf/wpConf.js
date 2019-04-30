@@ -1,6 +1,7 @@
 import path from "path";
 import fs from "fs";
 import webpack from "webpack";
+import CleanWebpackPlugin from 'clean-webpack-plugin';
 import yaml from "node-yaml";
 
 const userConfigLoader = projectDir => {
@@ -78,8 +79,19 @@ const getProjectContext = (targetPath = '.') => {
     return path.resolve(targetPath);
 }
 
-export default ({ projectPath }) => {
-    const context = getProjectContext(projectPath);
+
+
+/**
+ * 生成配置项目
+ * @params    {object}      options - Customer
+ * @return    {object}      webpack options
+ */
+export default ({
+    workspace
+}) => {
+    const context = getProjectContext(workspace);
+
+
 
     /* Generate configs Object */
     return {
@@ -87,35 +99,49 @@ export default ({ projectPath }) => {
 
         mode: "none",
 
-        entry: ["./src/apps/admin/main"],
+        entry: [
+            './src/admin/index.js'
+        ],
 
         output: {
-            path: "/Users/jason/workspace/xrosy-generator/example/build",
-            filename: "bundle.js"
+            path: './build',
+            filename: "[name].js",
+            // publicPath: '',
         },
-        optimization: {
-            minimize: true
-        },
+
+        // chunkFilename: 'libs',
 
         resolve: {
-            alias: {},
-
             /* 引入依赖或者文件时，强制要求添加文件的扩展名 */
-            enforceExtension: true,
-
-            enforceModuleExtension: false,
-
+            // enforceExtension: true,
+            // enforceModuleExtension: false,
+            alias: {},
             extensions: [".js", ".jsx"]
         },
 
         module: {
-            rules: [{
-                test: /\.(js|jsx)$/,
-                use: ["babel-loader"],
-                exclude: /node_modules/
-            }]
+            rules: [
+                {
+                    test: /\.(js|jsx)$/,
+                    exclude: /(node_modules|bower_components)/,
+                    use: {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: [
+                                '@babel/preset-env',
+                                '@babel/preset-react'
+                            ]
+                        }
+                    },
+                }
+            ]
         },
 
-        plugins: []
+        plugins: [
+            new webpack.ProgressPlugin(),
+            new CleanWebpackPlugin({}),
+        ],
+
+        optimization: { minimize: true },
     };
 };

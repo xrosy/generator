@@ -1,5 +1,5 @@
 
-import xrosy from 'xrosy-command';
+import xrosy       from '@xrosy/command';
 import packageInfo from '../package.json';
 import { devActivity, buildActivity } from "./webpackProxy.js";
 
@@ -26,6 +26,7 @@ xrosy
 xrosy
   .version(packageInfo.version, '-v, --version', `输出版本号 (v${packageInfo.version})`)
   .parse(process.argv);
+
 
 
 /* ---- */

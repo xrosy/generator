@@ -1,145 +1,119 @@
-import path    from "path";
+import path from "path";
 import webpack from "webpack";
-import utils   from "./utils.js";
-import wpConf  from "./conf/wpConf.js";
-import { CONST_PORT, CONST_DIST_PATH, CONST_ENV } from require("./defConf.js");
+import CleanWebpackPlugin from "clean-webpack-plugin";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+
+import * as utils from "./utils.js";
+import devServer from "./server.js";
+
+import { CONST_PORT, CONST_DIST_PATH, CONST_ENV } from "./defConf.js";
 
 
 
-const wpAgent = ({ port, env, distDir, sourceWorkDir = "." }) => {
+const wpAgent = ({ workspace = ".", port, env, distDir }) => {
+  const wpWorkspace = utils.getWorkspace(workspace);
+  const customConf  = utils.xrosyrc(wpWorkspace);
 
-  /* Webpack configs */
-  const __CONFIGS__ = wpConf({ env, port, distDir, projectPath: sourceWorkDir });
+  const wpOutputPath = path.join(wpWorkspace, "./build");
 
-  const wpCompiler = webpack(__CONFIGS__);
+  const wpConfig = {
+    context: wpWorkspace,
 
-  const wpWatcher = wpCompiler.run((err, stats) => {
+    mode: "none",
 
-    const stdoutConf = stats.toString({
-      stats: {
-        // 未定义选项时，stats 选项的备用值(fallback value)（优先级高于 webpack 本地默认值）
-        all: undefined,
+    devtool: "eval-source-map",
 
-        // 添加资源信息
-        assets: true,
+    entry: {
+      admin: ["webpack-hot-middleware/client", "./src/admin/index.js"]
+    },
 
-        // 对资源按指定的字段进行排序
-        // 你可以使用 `!field` 来反转排序。
-        // Some possible values: 'id' (default), 'name', 'size', 'chunks', 'failed', 'issuer'
-        // For a complete list of fields see the bottom of the page
-        assetsSort: "field",
+    output: {
+      path: wpOutputPath,
+      filename: "[name].js",
+      publicPath: "/",
+      pathinfo: false
+    },
 
-        // 添加构建日期和构建时间信息
-        builtAt: true,
+    resolve: {
+      /* 引入依赖或者文件时，强制要求添加文件的扩展名 */
 
-        // 添加缓存（但未构建）模块的信息
-        cached: true,
+      alias: {},
+      extensions: [".js", ".jsx"],
+      enforceExtension: false,
 
-        // 显示缓存的资源（将其设置为 `false` 则仅显示输出的文件）
-        cachedAssets: true,
+      /* 对模块是否需要使用的扩展 */
+      enforceModuleExtension: false
 
-        // 添加 children 信息
-        children: true,
+      // modules: [ path.join(wpWorkspace, 'node_modules') ],
+    },
 
-        // 添加 chunk 信息（设置为 `false` 能允许较少的冗长输出）
-        chunks: true,
+    module: {
+      rules: [
+        {
+          test: /\.(js|jsx)$/,
+          exclude: /(node_modules|bower_components)/,
+          use: {
+            loader: "babel-loader",
+            options: {
+              presets: ["@babel/preset-env", "@babel/preset-react"]
+            }
+          }
+        }
+      ]
+    },
 
-        // 添加 namedChunkGroups 信息
-        chunkGroups: true,
+    plugins: [
+      new CleanWebpackPlugin({ dry: false, verbose: false }),
+      new webpack.DefinePlugin({
+        env: JSON.stringify(process.env.NODE_ENV || "dev")
+      }),
 
-        // 将构建模块信息添加到 chunk 信息
-        chunkModules: true,
+      // new webpack.ProgressPlugin(),
+      new webpack.HotModuleReplacementPlugin(),
+      new webpack.NoEmitOnErrorsPlugin(),
+      new HtmlWebpackPlugin({
+        chunks: ["library", "utils", "admin"]
+      })
+    ],
 
-        // 添加 chunk 和 chunk merge 来源的信息
-        chunkOrigins: true,
+    optimization: {
+      minimize: true,
+      splitChunks: {
+        cacheGroups: {
+          libs: {
+            name: "library",
+            test: /node_modules/,
+            chunks: "initial",
+            // 打包后的文件名，任意命名
+            // 设置优先级，防止和自定义的公共代码提取时被覆盖，不进行打包
+            priority: 10
+          },
 
-        // 按指定的字段，对 chunk 进行排序
-        // 你可以使用 `!field` 来反转排序。默认是按照 `id` 排序。
-        // Some other possible values: 'name', 'size', 'chunks', 'failed', 'issuer'
-        // For a complete list of fields see the bottom of the page
-        chunksSort: "field",
-
-        // 用于缩短 request 的上下文目录
-        context: "../src/",
-
-        // `webpack --colors` 等同于
-        colors: {
-          green: '\u001b[32m',
-        },
-
-        // 显示每个模块到入口起点的距离(distance)
-        depth: true,
-
-        // 通过对应的 bundle 显示入口起点
-        entrypoints: false,
-
-        // 添加 --env information
-        env: false,
-
-        // 添加错误信息
-        errors: true,
-
-        // 添加错误的详细信息（就像解析日志一样）
-        errorDetails: true,
-
-        // 添加 compilation 的哈希值
-        hash: true,
-
-        // 设置要显示的模块的最大数量
-        maxModules: 1,
-
-        // 添加构建模块信息
-        modules: true,
-
-        // 按指定的字段，对模块进行排序
-        // 你可以使用 `!field` 来反转排序。默认是按照 `id` 排序。
-        // Some other possible values: 'name', 'size', 'chunks', 'failed', 'issuer'
-        // For a complete list of fields see the bottom of the page
-        modulesSort: "field",
-
-        // 显示警告/错误的依赖和来源（从 webpack 2.5.0 开始）
-        moduleTrace: true,
-
-        // 当文件大小超过 `performance.maxAssetSize` 时显示性能提示
-        performance: true,
-
-        // 显示模块的导出
-        providedExports: false,
-
-        // 添加 public path 的信息
-        publicPath: true,
-
-        // 添加模块被引入的原因
-        reasons: true,
-
-        // 添加模块的源码
-        source: true,
-
-        // 添加时间信息
-        timings: false,
-
-        // 显示哪个模块导出被用到
-        usedExports: true,
-
-        // 添加 webpack 版本信息
-        version: false
+          utils: {
+            name: "utils",
+            chunks: "initial",
+            // 只要超出0字节就生成一个新包
+            minSize: 0
+          }
+        }
       }
-    });
+    }
+  };
 
-    process.stdout.write(stdoutConf);
-  });
+  return webpack(wpConfig);
 };
 
-
 /* -------------------------------------------------------------------------- */
-
 /*  */
-exports.buildActivity = (sourceWorkDir, arws) => {};
-
-
-/*  */
-exports.devActivity = (sourceWorkDir, args) => {
+export const buildActivity = (workspace, args) => {
   const { env, port = CONST_PORT } = args;
 
-  wpAgent({ sourceWorkDir, port, env });
+  wpAgent({ workspace });
+};
+
+/*  */
+export const devActivity = (workspace, args) => {
+  const { env, port = CONST_PORT } = args;
+
+  devServer(wpAgent({ workspace }));
 };
