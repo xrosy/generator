@@ -1,0 +1,7 @@
+{
+  "extends": "xrosy",
+
+  "rules": {
+    "no-console": "off"
+  }
+}

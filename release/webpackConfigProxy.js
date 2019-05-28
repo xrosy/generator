@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.devActivity = exports.buildActivity = void 0;
+exports.buildActivity = exports.devActivity = void 0;
 
 var _path = _interopRequireDefault(require("path"));
 
@@ -17,11 +17,15 @@ var utils = _interopRequireWildcard(require("./utils.js"));
 
 var _server = _interopRequireDefault(require("./server.js"));
 
-var _defConf = require("./defConf.js");
+var _WPConfig = _interopRequireDefault(require("./WPConfig.js"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var wpAgent = function wpAgent(_ref) {
   var _ref$workspace = _ref.workspace,
@@ -29,8 +33,11 @@ var wpAgent = function wpAgent(_ref) {
       port = _ref.port,
       env = _ref.env,
       distDir = _ref.distDir;
+  var wpConfigs = new _WPConfig["default"](workspace);
+  console.log(wpConfigs);
+  return;
   var wpWorkspace = utils.getWorkspace(workspace);
-  var customConf = utils.xrosyrc(wpWorkspace);
+  var userConf = utils.xrosyrc(wpWorkspace);
 
   var wpOutputPath = _path["default"].join(wpWorkspace, './build');
 
@@ -107,26 +114,24 @@ var wpAgent = function wpAgent(_ref) {
 /*  */
 
 
-var buildActivity = function buildActivity(workspace, args) {
-  var env = args.env,
-      _args$port = args.port,
-      port = _args$port === void 0 ? _defConf.CONST_PORT : _args$port;
-  wpAgent({
+var devActivity = function devActivity(workspace, args) {
+  var port = args.port,
+      env = args.env;
+  var wpConfig = new _WPConfig["default"](_objectSpread({}, args, {
     workspace: workspace
-  });
+  }));
+  console.log(wpConfig); // wpConfig.start();
+  // wpConfig.devServer(port);
+  // devServer(wpAgent({ workspace }));
 };
 /*  */
 
 
-exports.buildActivity = buildActivity;
+exports.devActivity = devActivity;
 
-var devActivity = function devActivity(workspace, args) {
+var buildActivity = function buildActivity(workspace, args) {
   var env = args.env,
-      _args$port2 = args.port,
-      port = _args$port2 === void 0 ? _defConf.CONST_PORT : _args$port2;
-  (0, _server["default"])(wpAgent({
-    workspace: workspace
-  }));
+      port = args.port; // wpAgent({ workspace });
 };
 
-exports.devActivity = devActivity;
+exports.buildActivity = buildActivity;

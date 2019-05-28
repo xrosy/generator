@@ -5,16 +5,29 @@
 # apps: src/apps
 
 
-# 当配置为对象时，可以单独配置每个应用的信息
-#
-apps:
-  admin: src/admin
-  demo:
-    path: src/admin
-    view: src/admin/viewer.html
-    title: HTML TITLE
-
-
 node_modules:
   - xrosy
   - zals
+
+
+# 当配置为对象时，可以单独配置每个应用的信息
+#
+# apps:
+#   admin: src/admin
+#   demo:
+#     path: src/admin
+#     view: src/admin/viewer.html
+#     title: HTML TITLE
+
+
+# 设置别名
+alias:
+  admin: './src/admin'
+  utils: './src/utils'
+
+
+
+service:
+  src/zals:
+    - aa
+    - bb

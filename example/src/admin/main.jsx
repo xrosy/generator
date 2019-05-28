@@ -1,4 +1,5 @@
-import React      from 'react';
+import React from 'react';
+
 import Demo from './demo.jsx';
 
 
@@ -11,14 +12,10 @@ export default class extends React.Component {
   render() {
     return (
       <div>
-        <span>Admin aaaaa</span>
+        <span>Admin 1aaa</span>
         <Demo />
       </div>
     );
   }
+
 }
-
-
-
-
-

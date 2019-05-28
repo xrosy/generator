@@ -1,1 +1,64 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.xrosyrc=exports.getWorkspace=void 0;var _path=_interopRequireDefault(require("path")),_fs=_interopRequireDefault(require("fs")),_nodeYaml=_interopRequireDefault(require("node-yaml"));function _interopRequireDefault(a){return a&&a.__esModule?a:{default:a}}var getWorkspace=function(a){return _path["default"].resolve(a)};exports.getWorkspace=getWorkspace;var xrosyrc=function(a){var b=[".xrosyrc",".xrosyrc.yml",".xrosyrc.yaml",".xrosyrc.json"].find(function(b){var c=_path["default"].join(a,b);return _fs["default"].existsSync(c)});return b?(_path["default"].join(a,target),_nodeYaml["default"].readSync(sourcePath,{encoding:"utf8"})):{}};exports.xrosyrc=xrosyrc;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.xrosyrc = exports.getWorkspace = exports.pathExists = void 0;
+
+var _path = _interopRequireDefault(require("path"));
+
+var _fs = _interopRequireDefault(require("fs"));
+
+var _nodeYaml = _interopRequireDefault(require("node-yaml"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var pathExists = function pathExists(strPath) {
+  return _fs["default"].existsSync(strPath);
+};
+
+exports.pathExists = pathExists;
+
+var _readYamlConfig = function _readYamlConfig(targetPath) {
+  var encoding = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'utf8';
+  var userConf;
+  userConf = {};
+
+  try {
+    userConf = _nodeYaml["default"].readSync(targetPath, {
+      encoding: encoding
+    });
+  } catch (e) {
+    console.error(e);
+  }
+
+  return userConf;
+};
+
+var _findUserProfile = function _findUserProfile(workspace) {
+  var supporter = ['.xrosyrc', '.xrosyrc.yml', '.xrosyrc.yaml', '.xrosyrc.json'];
+  return supporter.find(function (item) {
+    return _fs["default"].existsSync(_path["default"].join(workspace, item));
+  });
+};
+
+var getWorkspace = function getWorkspace(dir) {
+  return _path["default"].resolve(dir);
+};
+
+exports.getWorkspace = getWorkspace;
+
+var xrosyrc = function xrosyrc(workspace) {
+  var profileName = _findUserProfile(workspace);
+
+  if (typeof profileName !== 'string') return {};
+
+  var profilePath = _path["default"].join(workspace, profileName);
+
+  switch (profileName) {
+    default:
+      return _readYamlConfig(profilePath);
+  }
+};
+
+exports.xrosyrc = xrosyrc;

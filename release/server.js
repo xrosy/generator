@@ -1,1 +1,37 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports["default"]=void 0;var _express=_interopRequireDefault(require("express")),_webpackDevMiddleware=_interopRequireDefault(require("webpack-dev-middleware")),_webpackHotMiddleware=_interopRequireDefault(require("webpack-hot-middleware"));function _interopRequireDefault(a){return a&&a.__esModule?a:{default:a}}var _default=function(a){var b=(0,_express["default"])();b.use((0,_webpackDevMiddleware["default"])(a,{publicPath:a.options.publicPath,headers:{"X-Custom-Header":"yes"},logLevel:"error"})),b.use((0,_webpackHotMiddleware["default"])(a,{noInfo:!0})),b.listen("3000",function(a){a&&console.log(a),global.console.info("Listening on port 3000. Open up http://0.0.0.0:3000/ in your browser.")})};exports["default"]=_default;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _express = _interopRequireDefault(require("express"));
+
+var _webpackDevMiddleware = _interopRequireDefault(require("webpack-dev-middleware"));
+
+var _webpackHotMiddleware = _interopRequireDefault(require("webpack-hot-middleware"));
+
+var _defConf = require("./defConf.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var _default = function _default(wpCompiler) {
+  var server = (0, _express["default"])();
+  console.log(wpCompiler);
+  server.use((0, _webpackDevMiddleware["default"])(wpCompiler, {
+    publicPath: wpCompiler.options.publicPath,
+    headers: {
+      'X-Custom-Header': 'yes'
+    },
+    logLevel: 'error'
+  }));
+  server.use((0, _webpackHotMiddleware["default"])(wpCompiler, {
+    noInfo: true
+  }));
+  server.listen(_defConf.DEFAULT_PORT, function (err) {
+    if (err) return console.log(err);
+    console.info('Listening on port 3000. Open up http://0.0.0.0:3000/ in your browser.');
+  });
+};
+
+exports["default"] = _default;

@@ -1,6 +1,7 @@
-import React    from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import Main     from "./main.jsx";
+
+import Main from './main.jsx';
 
 if (module.hot) module.hot.accept();
 

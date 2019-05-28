@@ -16,6 +16,7 @@
     "xrosy": "bin/xrosy"
   },
   "scripts": {
+    "release": "babel src -d release",
     "dev": "babel src -d release && bin/xrosy dev example",
     "build:min": "babel src -d release --presets minify && bin/xrosy dev example",
     "deploy": "git add . && git commit -m \"$(date)\" && git push"
@@ -32,14 +33,15 @@
     "babel-preset-minify": "^0.5.0",
     "clean-webpack-plugin": "^2.0.1",
     "css-loader": "^2.1.1",
-    "eslint": "^5.15.2",
+    "eslint": "^5.16.0",
+    "eslint-config-xrosy": "^0.1.42",
     "eslint-loader": "^2.1.2",
     "express": "^4.16.4",
     "html-webpack-plugin": "^3.2.0",
     "json-loader": "^0.5.7",
     "json5-loader": "^1.0.1",
     "less": "^3.9.0",
-    "less-loader": "^4.1.0",
+    "less-loader": "^5.0.0",
     "localforage": "^1.7.3",
     "node-yaml": "^3.1.1",
     "postcss-loader": "^3.0.0",

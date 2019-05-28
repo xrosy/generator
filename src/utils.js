@@ -1,29 +1,47 @@
-import path from "path";
-import fs   from 'fs';
-import yaml from "node-yaml";
+import path from 'path';
+import fs from 'fs';
+
+import yaml from 'node-yaml';
 
 
+export const pathExists = (strPath) => fs.existsSync(strPath)
 
-export const getWorkspace = (dir) => {
-  return path.resolve(dir);
+
+const _readYamlConfig = (targetPath, encoding = 'utf8') => {
+  let userConf;
+
+  userConf = {};
+
+  try {
+    userConf = yaml.readSync(targetPath, { encoding });
+  }
+  catch (e) {
+    console.error(e);
+  }
+
+  return userConf;
 };
 
 
+const _findUserProfile = (workspace) => {
+  const supporter = [ '.xrosyrc', '.xrosyrc.yml', '.xrosyrc.yaml', '.xrosyrc.json' ];
+
+  return supporter.find((item) => fs.existsSync(path.join(workspace, item)));
+};
+
+
+export const getWorkspace = (dir) => path.resolve(dir);
+
+
 export const xrosyrc = (workspace) => {
-  const filename = [
-    '.xrosyrc',
-    '.xrosyrc.yml',
-    '.xrosyrc.yaml',
-    '.xrosyrc.json',
-  ].find((item) => {
-    const source = path.join(workspace, item);
-    return fs.existsSync(source);
-  });
+  const profileName = _findUserProfile(workspace);
 
-  if (filename) {
-    path.join(workspace, target)
-    return yaml.readSync(sourcePath, { encoding: "utf8"});
+  if (typeof profileName !== 'string') return {};
+
+  const profilePath = path.join(workspace, profileName);
+
+  switch (profileName) {
+    default:
+      return _readYamlConfig(profilePath);
   }
-
-  return {};
 };

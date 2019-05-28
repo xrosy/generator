@@ -1,6 +1,6 @@
 
-exports.CONST_PORT = '9090';
+export const DEFAULT_ENV = process.env.XROSY_ENV || process.env.NODE_ENV || 'develop';
 
-exports.CONST_DIST_PATH = 'dist';
+export const DEFAULT_SERVICE_PORT = 3000;
 
-exports.CONST_ENV = process.env.XROSY_ENV || process.env.NODE_ENV;
+export const DEFAULT_DIST_PATH = 'dist';
