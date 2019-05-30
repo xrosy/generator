@@ -1,8 +1,36 @@
 
-
-# 当配置为字符时，设置应用目录的集合
+# 当配置为对象时，可以单独配置每个应用的信息
+# service:
+#   <service name>: <portal path>
+#   <service name>:
+#     path:  <portal path>
+#     view:  <view path>
+#     title: <service title>    # HTML TITLE
 #
-# apps: src/apps
+# service:
+#   admin: src/admin
+#   demo:
+#     path: src/admin
+#     view: src/admin/viewer.html
+#     title: HTML TITLE
+#
+services:
+  admin: src/services/admin/main.jsx
+  demo:
+    path: src/services/demo/main.jsx
+
+output: build
+# output:
+#   path: _www
+#   publicPath: https://static.zhonganbio.com/static
+
+# 清除历史缓存文件
+#
+clearCache: true
+
+
+define:
+  env: $NODE_ENV
 
 
 node_modules:
@@ -10,24 +38,7 @@ node_modules:
   - zals
 
 
-# 当配置为对象时，可以单独配置每个应用的信息
-#
-# apps:
-#   admin: src/admin
-#   demo:
-#     path: src/admin
-#     view: src/admin/viewer.html
-#     title: HTML TITLE
-
-
 # 设置别名
 alias:
   admin: './src/admin'
   utils: './src/utils'
-
-
-
-service:
-  src/zals:
-    - aa
-    - bb

@@ -3,7 +3,7 @@ import xrosy from '@xrosy/command';
 
 import packageInfo from '../package.json';
 import { devActivity, buildActivity } from './WPAgent.js';
-import { DEFAULT_ENV, DEFAULT_SERVICE_PORT } from './defConf.js';
+import { DEFAULT_ENV, DEFAULT_SERVICE_PORT } from './WPConfig.const.js';
 
 
 xrosy

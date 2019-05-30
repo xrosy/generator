@@ -2,12 +2,12 @@ import express from 'express';
 import wpDevMiddleware from 'webpack-dev-middleware';
 import wpHotMiddleware from 'webpack-hot-middleware';
 
-import { DEFAULT_PORT } from './defConf.js';
+import { DEFAULT_SERVICE_PORT } from './WPConfig.const.js';
 
-export default wpCompiler => {
-  const server = express();
-
+export default (wpCompiler) => {
   console.log(wpCompiler);
+
+  const server = express();
 
   server.use(wpDevMiddleware(wpCompiler, {
     publicPath: wpCompiler.options.publicPath,
@@ -19,9 +19,9 @@ export default wpCompiler => {
     noInfo : true,
   }));
 
-  server.listen(DEFAULT_PORT, err => {
+  server.listen(DEFAULT_SERVICE_PORT, err => {
     if (err) return console.log(err);
 
-    console.info('Listening on port 3000. Open up http://0.0.0.0:3000/ in your browser.');
+    console.info(`Listening on port 3000. Open up http://0.0.0.0:${DEFAULT_SERVICE_PORT}/ in your browser.`);
   });
 };
