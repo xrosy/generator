@@ -16,8 +16,13 @@
 #
 services:
   admin: src/services/admin/main.jsx
+  portal:
+    path: src/services/demo/app.jsx
+    view: src/services/demo/app.tpl
   demo:
-    path: src/services/demo/main.jsx
+    path: src/services/demo
+    view: false
+
 
 output: build
 # output:

@@ -1,5 +1,7 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -12,8 +14,6 @@ var _webpackDevMiddleware = _interopRequireDefault(require("webpack-dev-middlewa
 var _webpackHotMiddleware = _interopRequireDefault(require("webpack-hot-middleware"));
 
 var _WPConfigConst = require("./WPConfig.const.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var _default = function _default(wpCompiler) {
   console.log(wpCompiler);

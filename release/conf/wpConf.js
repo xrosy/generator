@@ -1,9 +1,17 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
+
+var _objectSpread2 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
 
 var _path = _interopRequireDefault(require("path"));
 
@@ -14,18 +22,6 @@ var _webpack = _interopRequireDefault(require("webpack"));
 var _cleanWebpackPlugin = _interopRequireDefault(require("clean-webpack-plugin"));
 
 var _nodeYaml = _interopRequireDefault(require("node-yaml"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var userConfigLoader = function userConfigLoader(projectDir) {
   var ymlPath = _path["default"].join(projectDir, "./.xrosyrc.yml");
@@ -43,9 +39,8 @@ var XrosyConf =
 /*#__PURE__*/
 function () {
   function XrosyConf(settingsObj) {
-    _classCallCheck(this, XrosyConf);
-
-    this.__ = _objectSpread({}, settingsObj);
+    (0, _classCallCheck2["default"])(this, XrosyConf);
+    this.__ = (0, _objectSpread2["default"])({}, settingsObj);
     this.engine = "react";
     this.env = this.getEnvironment();
     this.projectContext = this.getProjectContext();
@@ -55,7 +50,7 @@ function () {
     this.resolveExtensions = this.getResolveExtensions();
   }
 
-  _createClass(XrosyConf, [{
+  (0, _createClass2["default"])(XrosyConf, [{
     key: "getProjectContext",
     value: function getProjectContext() {
       return this.projectContext || _path["default"].resolve(this.__.projectDir);
@@ -98,7 +93,6 @@ function () {
       }];
     }
   }]);
-
   return XrosyConf;
 }();
 /* ---------------------------------------- */
