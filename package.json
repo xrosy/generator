@@ -16,10 +16,9 @@
     "xrosy": "bin/xrosy"
   },
   "scripts": {
-    "release": "babel src -d release",
-    "dev": "babel src -d release && bin/xrosy dev example",
-    "build:min": "babel src -d release --presets minify && bin/xrosy dev example",
-    "deploy": "git add . && git commit -m \"$(date)\" && git push"
+    "release": "npx babel src -d release > /dev/null && echo \"Successfully compiled!\"",
+    "init": "npx babel src -d release && bin/xrosy init ./xrosy-dev --force",
+    "dev": "npx babel src -d release && bin/xrosy dev example"
   },
   "dependencies": {
     "@babel/core": "^7.4.5",
@@ -56,6 +55,7 @@
     "react-router-dom": "^4.3.1",
     "react-transform-catch-errors": "^1.0.2",
     "react-transform-hmr": "^1.0.4",
+    "redux": "^4.0.1",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
     "webpack": "^4.35.0",
@@ -64,6 +64,7 @@
     "webpack-hot-middleware": "^2.25.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3"
+    "@babel/cli": "^7.4.4",
+    "@babel/plugin-proposal-decorators": "^7.4.4"
   }
 }

@@ -1,7 +1,19 @@
 {
-  "presets": [ "@babel/preset-env" ],
+  "presets": [
+    ["minify", {
+      "evaluate": false,
+      "mangle": true,
+      "keepFnName": true
+    }],
+
+    "@babel/preset-env"
+  ],
+
   "plugins": [
     "@babel/transform-runtime",
-    "@babel/proposal-class-properties"
+
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+
+    ["@babel/plugin-proposal-class-properties", { "loose" : true }]
   ]
 }

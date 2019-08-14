@@ -1,4 +1,6 @@
-
+## ===================================================
+# Usage:
+#
 # 当配置为对象时，可以单独配置每个应用的信息
 # service:
 #   <service name>: <portal path>
@@ -14,8 +16,16 @@
 #     view: src/admin/viewer.html
 #     title: HTML TITLE
 #
+## ===================================================
+
+output: builds
+# output:
+#   path: _www
+#   publicPath: https://static.zhonganbio.com/static
 
 
+# 设置你的应用的
+#
 services:
   t1: src/services/admin/main.jsx
   t2:
@@ -27,10 +37,8 @@ services:
     path: src/services/demo/app.jsx
     view: src/services/demo/app.tpl
 
-output: builds
-# output:
-#   path: _www
-#   publicPath: https://static.zhonganbio.com/static
+
+
 
 # 清除历史缓存文件
 #

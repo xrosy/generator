@@ -7,7 +7,7 @@
 
   "rules": {
     "no-console": [ 0 ],
-    "no-template-curly-in-string": [2],
-    "indent"    : [ 1 ],
+    // "no-template-curly-in-string": [2],
+    // "indent"    : [ 1 ],
   }
 }

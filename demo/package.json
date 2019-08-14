@@ -1,0 +1,11 @@
+{
+  "name": "demo",
+  "version": "0.1.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "npx xrosy dev ."
+  },
+  "dependencies": {
+    "@xrosy/generator": "^0.1.0"
+  }
+}
