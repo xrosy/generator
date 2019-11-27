@@ -1,6 +1,6 @@
 {
-  "name": "demo",
-  "version": "0.1.0",
+  "name": "_example",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "dev": "npx xrosy dev ."

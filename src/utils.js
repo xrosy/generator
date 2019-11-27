@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import { Cat } from '@xrosy/cat';
+
 /** 验证文件或者目录是否存在
  *
  * @param   {string}      strPath             - the absolute path for file or directory.
@@ -20,6 +22,12 @@ export const mkdir = strPath => {
 };
 
 
-export const logger = () => {
-  console.log('sss');
-};
+export const logger = new Cat({
+  error  : '#redBright(:i-error)',
+  warn   : '#yellowBright(:i-warn)',
+  success: '#greenBright(:i-success)',
+  info   : '#blueBright(:i-info)',
+  log    : ':i-log',
+  primary: ':i-log',
+  debug  : '#cyanBright(:i-debug)',
+});

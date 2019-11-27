@@ -18,10 +18,9 @@ const SYM_HTML_WEBPACK_PLUGIN = Symbol.for('HtmlWebpackPlugin');
 const _PROFILE_SUPPORTED_LIST = [ '.xrosyrc', '.xrosyrc.yml', '.xrosyrc.yaml', '.xrosyrc.json' ];
 
 function logger (target, key, descriptor) {
-  console.log('descriptor:', descriptor);
-
   return descriptor;
 }
+
 
 function __setAttrPrivatization(obj, name) {
   Object.defineProperty(obj || {}, name, { writable: true, enumerable: false });
