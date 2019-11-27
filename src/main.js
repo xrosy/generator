@@ -13,7 +13,6 @@ xrosy
 xrosy
   .command('dev <workspace>')
   .description('开发模式')
-  // .option('-d, --dist-dir      <DIST_DIR_NAME>' , '指定打包输出的目录。（默认：--dist-dir=dist）')
   .option('-e, --env <env>', `指定环境变量标识 (默认：${DEFAULT_ENV})`)
   .option('-p, --port <port>', `设置映射的端口号 (默认: ${DEFAULT_SERVICE_PORT})`)
   .action(devActivity);

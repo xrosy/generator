@@ -4,7 +4,7 @@ import wpHotMiddleware from 'webpack-hot-middleware';
 
 import { DEFAULT_SERVICE_PORT } from './WPConst.js';
 
-export default wpCompiler => {
+export default (wpCompiler) => {
   console.log(wpCompiler);
 
   const server = express();
