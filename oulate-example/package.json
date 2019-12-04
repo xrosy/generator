@@ -1,0 +1,15 @@
+{
+  "name": "oulate-example",
+  "version": "1.0.0",
+  "author": "ChenZhenyuan <jason@chenzhenyuan.com>",
+  "license": "MIT",
+  "main": "./release/main.js",
+  "dependencies": {
+    "@xrosy/generator": "^0.1.1",
+    "node-yaml": "^4.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-xrosy": "^0.1.52"
+  }
+}

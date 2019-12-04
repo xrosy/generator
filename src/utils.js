@@ -3,31 +3,52 @@ import path from 'path';
 
 import { Cat } from '@xrosy/cat';
 
-/** 验证文件或者目录是否存在
- *
- * @param   {string}      strPath             - the absolute path for file or directory.
- * @return  {boolean}                         - the validate result.
- */
-export const _exists = strPath => fs.existsSync(strPath);
+import * as packageInfo from '../package.json';
 
 
-export const mkdir = strPath => {
-  const target = path.resolve(strPath);
+export const PKG_VERSION = packageInfo.version;
 
-  if (_exists(target) === false) {
-    fs.mkdirSync(target, { recursive: true }, (err) => {
-      console.log(err);
-    });
-  }
-};
+export const getResourceAbsolutePath = () => path.join(__dirname, '../resource');
 
 
 export const logger = new Cat({
   error  : '#redBright(:i-error)',
   warn   : '#yellowBright(:i-warn)',
-  success: '#greenBright(:i-success)',
+  success: '#greenBright(:i-success) %s',
   info   : '#blueBright(:i-info)',
   log    : ':i-log',
-  primary: ':i-log',
-  debug  : '#cyanBright(:i-debug)',
+  primary: '#greenBright(\u27a5 %s)',
+  debug  : '#cyanBright(:i-debug %s)',
 });
+
+
+/** 验证文件或者目录是否存在
+ *
+ * @param   {string}      strPath             - the absolute path for file or directory.
+ * @return  {boolean}                         - the validate result.
+ */
+export const exists = (pathStr) => fs.existsSync(pathStr);
+
+
+/** 创建文件夹 */
+export const mkdir = (abs, { force = false, recursive = true }) => {
+  const isExists = exists(abs);
+
+  return new Promise((resolve, reject) => {
+    if (isExists === false || force === true) {
+      fs.mkdir(abs, { recursive: recursive === true }, (err) => {
+        if (err) throw err;
+
+        logger.success('[SUCCESS]', abs);
+
+        resolve(abs);
+      });
+    }
+
+    resolve();
+  });
+};
+
+export const mkdirSync = (abs, { force = false, recursive = true }) => {
+  fs.mkdirSync(abs, { force, recursive });
+};

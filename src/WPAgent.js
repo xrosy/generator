@@ -3,130 +3,81 @@ import path from 'path';
 import fs from 'fs';
 
 import * as utils from './utils.js';
-import WPConfig from './WPConfig.js';
+import BuiltIn from './WPConfigs.js';
 
-const { logger } = utils;
+const cat = utils.logger;
+
+const PRO_DIRECTORY_LIST = [ 'library', 'documents', 'static', 'src', 'src/apps', 'src/configs', 'src/server', 'src/utils', 'test' ];
 
 /* 导出 init 接口 */
-export const initActivity = (directory, { force = false, ...argv }) => {
+export const initActivity = (directory, {
+  parent: { _version: version },
+  force = false,
+  recursive = true,
+}) => {
+  const resource = utils.getResourceAbsolutePath();
   const project = path.resolve('.', directory);
-  const resource = path.join(__dirname, '../resource');
 
-  logger.info(`[:datetime] [PROJECT PATH]: ${project}`);
-
-  // const mkdir = (...directories) => {
-  //   function _PromiseHandler (dir) {
-  //     const target = path.join(project, dir);
-
-  //     return new Promise((resolve, reject) => {
-  //       fs.mkdir(target, { recursive: true }, (err) => {
-  //         if (err) {
-  //           return reject(err);
-  //         }
-
-  //         resolve(target);
-  //       });
-  //     });
-  //   }
-
-  //   return Promise.all(Array.from(directories).map(_PromiseHandler));
-  // };
-
+  cat.info('Oulate version: ', utils.PKG_VERSION);
 
   /** 生成目录结构 */
-  Promise.all([
-    'documents',
-    'test',
-    'static',
-    'src',
-    'src/apps',
-    'src/configs',
-    'src/server',
-    'src/utils'
-  ].map((dir) => {
-    const target = path.join(project, dir);
 
-    return new Promise((resolve, reject) => {
-      fs.mkdir(target, { recursive: true }, (err) => {
-        if (err) {
-          logger.error('success:', target);
+  fs.mkdirSync(project, { recursive: recursive === true });
 
-          return reject(err);
-        }
+  cat.info('工程：', project);
 
-        logger.success('success:', target);
-        resolve(target);
-      });
-    });
-  })).then(() => {
-    function _PromiseHandler(resolve, reject) {
-      if (utils._exists(resource) === false) {
-        throw Error(`Missing: Can\'t not found ${resource}`);
-      }
-
-      fs.readdir(resource, (err, files) => {
-        if (err) return reject(err);
-
-        resolve(files);
-      });
-    }
-
-    return new Promise(_PromiseHandler);
-  }).then((files) => {
-    if (Array.isArray(files) === false || files.length === 0) {
-      return [];
-    }
-
-    const sourceFiles = files.map(file => path.join(resource, file));
-
-    const promiseTask = sourceFiles.map((target) => {
-      const _basename = path.basename(target);
-
-      return new Promise((resolve, reject) => {
-        const dest = path.join(project, _basename);
-
-        fs.copyFile(target, dest, (err) => {
-          if (err) return reject(err);
-          resolve();
-
-          logger.success('success:', dest);
-        });
-      });
-    });
-
-    return Promise.all(promiseTask);
-  }).then(() => {
-    /**
-     * 生成默认 package.json 文件
-     */
-    const pkgDesk = path.join(project, 'package.json');
-    const pkgName = path.basename(project);
-    const pkgContent = {
-      name   : pkgName,
-      version: '1.0.0',
-      license: 'MIT',
-      scripts: {
-        dev : 'npx xrosy dev .',
-      },
-      dependencies : {
-        '@xrosy/generator' : '^0.1.0',
-      },
-    };
-
-    fs.writeFileSync(pkgDesk, JSON.stringify(pkgContent, null, 2));
-  }).then(() => {
-    // - 初始化项目
+  PRO_DIRECTORY_LIST.forEach((dir) => {
+    utils.mkdirSync(path.resolve('.', directory, dir), { force: force === true, recursive: recursive === true });
+    cat.success('创建：', path.join(directory, dir));
   });
-};
 
+  /** 复制必要文件到项目目录下 */
+  if (utils.exists(resource) === false) {
+    throw Error(`Missing: Can\'t not found ${resource}`);
+  }
 
-/* 导出 dev 接口 */
-export const devActivity = (workspace, args) => {
-  new WPConfig({ ...args, workspace });
+  fs.readdirSync(resource).forEach((file) => {
+    const sf = path.join(resource, file);
+    const tf = path.join(project, file);
+
+    try {
+      fs.copyFileSync(sf, tf, +!force);
+      cat.success('创建：', path.join(directory, file));
+    }
+    catch (err) {
+      cat.error('失败：', path.join(directory, file), String(err.code).toUpperCase() === 'EEXIST' ? '\t#redBright([已存在])' : '');
+    }
+  });
+
+  // 写入 package.json
+  // fs.writeFile(filename, data[, options], callback)
+  fs.writeFileSync(path.join(project, 'package.json'), JSON.stringify({
+    name        : path.basename(directory),
+    version     : '1.0.0',
+    author      : 'ChenZhenyuan <jason@chenzhenyuan.com>',
+    license     : 'MIT',
+    main        : './release/main.js',
+    dependencies: {
+      '@xrosy/generator' : `^${utils.PKG_VERSION}`,
+    },
+    devDependencies : {
+      'eslint'             : '^5.16.0',
+      'eslint-config-xrosy': '^0.1.52',
+    },
+  }, null, 2));
 };
 
 
 /* 导出 build 接口 */
-export const buildActivity = (workspace, args) => {
-  new WPConfig({ ...args, workspace });
+export const buildActivity = (workspace, { env, _name: mode, _description: description, parent: { _version: version }, ...args }) => {
+  // console.log(args);
+  cat.clear();
+  BuiltIn({ workspace, env, mode, description, version }).run((err, stats) => {
+    const { errors } = stats.toJson();
+
+    cat.warn(errors.toString());
+
+    // cat.error(stats);
+    // cat.error(Object.keys(stats.compilation));
+  });
 };

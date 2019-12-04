@@ -1,0 +1,6 @@
+{
+  "extends": "xrosy",
+  "env": {
+    "es6": true
+  }
+}

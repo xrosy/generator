@@ -1,7 +1,7 @@
 
-FROM xrosy/node:latest
+FROM oulate/node:latest
 
-ENV NODE_VERSION 7.2.0
+ENV NODE_VERSION 10.12.0
 
 WORKDIR /
 

@@ -1,6 +1,6 @@
 {
-  "name": "@xrosy/generator",
-  "version": "0.1.0",
+  "name": "@oulate/generator",
+  "version": "0.1.1",
   "author": "ChenZhenyuan <jason@chenzhenyuan.com>",
   "license": "MIT",
   "description": "the generator of XRosy FE.",
@@ -8,18 +8,17 @@
   "private": false,
   "keywords": [
     "xrosy",
-    "ziluosha",
     "generator"
   ],
   "main": "./release/main.js",
   "bin": {
-    "xrosy": "bin/xrosy"
+    "oulate": "bin/oulate"
   },
   "scripts": {
     "release": "npx babel src -d release > /dev/null && echo \"Successfully compiled!\"",
-    "init": "npx babel src -d release && bin/xrosy init ./_example --force",
-    "dev:创建": "npx babel src -d release && bin/xrosy init ./_example --force",
-    "dev:开发": "npx babel src -d release && bin/xrosy dev _example"
+    "init": "npx babel src -d release && oulate init ./_example",
+    "dev:init": "npx babel src -d release && oulate init ./_example -f",
+    "dev:develop": "npx babel src -d release && bin/oulate dev --env=1 ./oulate-example"
   },
   "dependencies": {
     "@babel/core": "^7.7.4",
@@ -27,7 +26,7 @@
     "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "@babel/preset-react": "^7.7.4",
-    "@xrosy/cat": "^0.2.1",
+    "@xrosy/cat": "^0.2.2",
     "@xrosy/command": "^0.1.0",
     "antd-mobile": "^2.3.1",
     "autoprefixer": "^9.7.2",
@@ -37,6 +36,10 @@
     "clean-webpack-plugin": "^2.0.2",
     "css-loader": "^2.1.1",
     "dotenv": "^8.2.0",
+    "eslint": "^5.16.0",
+    "eslint-config-xrosy": "^0.1.52",
+    "eslint-loader": "^2.2.1",
+    "eslint-plugin-babel": "^5.3.0",
     "express": "^4.17.1",
     "html-webpack-plugin": "^3.2.0",
     "js-yaml": "^3.13.1",
@@ -45,16 +48,20 @@
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "localforage": "^1.7.3",
-    "node-yaml": "^3.2.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.13.0",
+    "node-yaml": "^4.0.1",
     "postcss-loader": "^3.0.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.1.3",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
+    "react-router-redux": "^4.0.8",
     "react-transform-catch-errors": "^1.0.2",
     "react-transform-hmr": "^1.0.4",
     "redux": "^4.0.4",
+    "sass-loader": "^8.0.0",
     "scss": "^0.2.4",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
@@ -66,9 +73,6 @@
   "devDependencies": {
     "@babel/cli": "^7.7.4",
     "@babel/plugin-proposal-decorators": "^7.7.4",
-    "eslint": "^5.16.0",
-    "eslint-config-xrosy": "^0.1.52",
-    "eslint-loader": "^2.2.1",
-    "eslint-plugin-babel": "^5.3.0"
+    "moment": "^2.24.0"
   }
 }
