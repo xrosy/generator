@@ -72,12 +72,6 @@ export const initActivity = (directory, {
 export const buildActivity = (workspace, { env, _name: mode, _description: description, parent: { _version: version }, ...args }) => {
   // console.log(args);
   cat.clear();
-  BuiltIn({ workspace, env, mode, description, version }).run((err, stats) => {
-    const { errors } = stats.toJson();
 
-    cat.warn(errors.toString());
-
-    // cat.error(stats);
-    // cat.error(Object.keys(stats.compilation));
-  });
+  BuiltIn({ workspace, env, mode, description, version });
 };

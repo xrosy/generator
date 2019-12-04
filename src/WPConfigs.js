@@ -230,5 +230,10 @@ export default function BuiltIn({ workspace = '.' }) {
   }
 
 
-  return webpack(new WPConfig());
+  webpack(new WPConfig()).run((err, stats) => {
+    // const { errors } = stats.toJson();
+    // console.warn(errors.toString());
+    // cat.error(stats);
+    // cat.error(Object.keys(stats.compilation));
+  });
 }

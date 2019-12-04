@@ -30,4 +30,8 @@ new _webpack["default"].optimize.LimitChunkCountPlugin({maxChunks:5})// new webp
 // new webpack.HotModuleReplacementPlugin(),
 // new webpack.NoEmitOnErrorsPlugin(),
 ],this.context=function(){return d}(),this.entry={},this.output=function(){var a=g.output||{path:"dist"};return"string"==typeof a&&(a={path:a}),_objectSpread({hashSalt:"Oulate X",publicPath:""},a,{path:_path["default"].join(d,a.path),filename:"static/js/[name].[chunkhash:6].js",chunkFilename:"static/js/[name].[chunkhash:6].js"})}(),this.optimization.noEmitOnErrors=!0,this.initEntries()}return(0,_createClass2["default"])(WPConfig,[{key:"initEntries",value:function initEntries(){var a=this,b=f;Object.keys(b).forEach(function(c){var e=_path["default"].join(d,"src","apps",b[c]);a.entry[c]=_path["default"].join(e,"main.js"),a.plugins=a.plugins||[],a.plugins.push(new _htmlWebpackPlugin["default"]({chunks:["runtime","framework.depend","framework.commons",c],template:_path["default"].join(e,"main.html"),filename:"".concat(c,".html"),hash:!1,// eslint-disable-next-line babel/camelcase
-templateParameters:{compile_date:new Date().toLocaleString("zh",{hour12:!1})},minify:{collapseWhitespace:!0,removeComments:!1,removeRedundantAttributes:!0,removeScriptTypeAttributes:!0,removeStyleLinkTypeAttributes:!0,useShortDoctype:!0}}))})}}]),WPConfig}();return(0,_webpack["default"])(new h)}
+templateParameters:{compile_date:new Date().toLocaleString("zh",{hour12:!1})},minify:{collapseWhitespace:!0,removeComments:!1,removeRedundantAttributes:!0,removeScriptTypeAttributes:!0,removeStyleLinkTypeAttributes:!0,useShortDoctype:!0}}))})}}]),WPConfig}();(0,_webpack["default"])(new h).run(function(){// const { errors } = stats.toJson();
+// console.warn(errors.toString());
+// cat.error(stats);
+// cat.error(Object.keys(stats.compilation));
+})}
