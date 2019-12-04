@@ -20,7 +20,13 @@ export default function BuiltIn({ workspace = '.' }) {
 
   class WPConfig {
 
+    entry = {};
+
     bail = true;
+
+    context = (function() {
+      return absWorkspace;
+    }())
 
     mode = 'development'; // "development" | "production" | "none"
 
@@ -39,61 +45,59 @@ export default function BuiltIn({ workspace = '.' }) {
     };
 
     module = {
-      rules : [
-        {
-          test: /\.jsx?$/,
-          use : {
-            loader : 'babel-loader',
-            options: {
-              cacheDirectory: true,
-              presets       : [ '@babel/preset-env', '@babel/preset-react' ],
-              plugins       : [ '@babel/plugin-proposal-class-properties', '@babel/plugin-transform-runtime' ],
-            },
+      rules : [{
+        test: /\.jsx?$/,
+        use : {
+          loader : 'babel-loader',
+          options: {
+            cacheDirectory: true,
+            presets       : [ '@babel/preset-env', '@babel/preset-react' ],
+            plugins       : [ '@babel/plugin-proposal-class-properties', '@babel/plugin-transform-runtime' ],
           },
-          include : path.join(absWorkspace, 'src'),
-          // exclude : /(node_modules|bower_components)/,
         },
+        include : path.join(absWorkspace, 'src'),
+        // exclude : /(node_modules|bower_components)/,
+      },
 
-        {
-          test: /\.s?css$/,
-          use : [{
-            loader : MiniCssExtractPlugin.loader,
-            options: {
-              // reloadAll : true,
-              // publicPath: '../',
-              // hmr       : process.env.NODE_ENV === 'development',
-            },
-          }, {
-            loader : 'css-loader', options: { importLoaders: 1 },
-          }, {
-            loader : 'sass-loader', options: {},
-          }],
-        },
+      {
+        test: /\.s?css$/,
+        use : [{
+          loader : MiniCssExtractPlugin.loader,
+          options: {
+            // reloadAll : true,
+            // publicPath: '../',
+            // hmr       : process.env.NODE_ENV === 'development',
+          },
+        }, {
+          loader : 'css-loader', options: { importLoaders: 1 },
+        }, {
+          loader : 'sass-loader', options: {},
+        }],
+      },
 
-        {
-          test: /\.less$/,
-          use : [{
-            loader : MiniCssExtractPlugin.loader, options: { reloadAll: true },
-          }, {
-            loader : 'css-loader', options: { importLoaders: 1 },
-          }, {
-            loader : 'less-loader',
-          }],
-        },
+      {
+        test: /\.less$/,
+        use : [{
+          loader : MiniCssExtractPlugin.loader, options: { reloadAll: true },
+        }, {
+          loader : 'css-loader', options: { importLoaders: 1 },
+        }, {
+          loader : 'less-loader',
+        }],
+      },
 
-        {
-          test: /\.(jpg|png|gif|bmp|jpeg)$/,
-          use : [{
-            loader : 'url-loader',
-            options: {
-              esModule  : false,
-              limit     : 8192,
-              publicPath: '../../',
-              name      : 'static/images/[name].[ext]',
-            },
-          }],
-        },
-      ],
+      {
+        test: /\.(jpg|png|gif|bmp|jpeg)$/,
+        use : [{
+          loader : 'url-loader',
+          options: {
+            esModule  : false,
+            limit     : 8192,
+            publicPath: '../',
+            name      : 'images/[hash:16].[ext]',
+          },
+        }],
+      }],
     };
 
     optimization = {
@@ -153,7 +157,7 @@ export default function BuiltIn({ workspace = '.' }) {
       }),
 
       new MiniCssExtractPlugin({
-        filename : 'static/styles/[name].[hash:6].css',
+        filename : 'styles/[name].css',
       }),
 
       // new I18nPlugin(languageConfig, optionsObj),
@@ -167,13 +171,6 @@ export default function BuiltIn({ workspace = '.' }) {
       // new webpack.NoEmitOnErrorsPlugin(),
     ];
 
-
-    context = (function() {
-      return absWorkspace;
-    }())
-
-    entry = {};
-
     output = (function() {
       let userOutput = userConfigs.output || { path: 'dist' };
 
@@ -186,8 +183,8 @@ export default function BuiltIn({ workspace = '.' }) {
         publicPath   : '',
         ...userOutput,
         path         : path.join(absWorkspace, userOutput.path),
-        filename     : 'static/js/[name].[chunkhash:6].js',
-        chunkFilename: 'static/js/[name].[chunkhash:6].js',
+        filename     : 'js/[name].js',
+        chunkFilename: 'js/[name].js',
       };
     }());
 
