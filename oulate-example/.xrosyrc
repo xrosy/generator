@@ -46,16 +46,19 @@ apps:
 clearCache: true
 
 
-define:
-  env: $NODE_ENV
-
+# 暂时未实现
+#
+# define:
+#   env: $NODE_ENV
+## ---------------------------------------------------
 
 node_modules:
   - xrosy
   - zals
 
 
-# 设置别名
+# 映射别名
+#
 alias:
-  admin: './src/admin'
-  utils: './src/utils'
+  ss: 'src'
+

@@ -22,7 +22,7 @@ export default function BuiltIn({ workspace = '.' }) {
 
     bail = true;
 
-    mode = 'production'; // "development" | "production" | "none"
+    mode = 'development'; // "development" | "production" | "none"
 
     target = 'web';
 
@@ -31,7 +31,7 @@ export default function BuiltIn({ workspace = '.' }) {
     resolve = {
       mainFiles : [ 'index', 'main' ],
       extensions: [ '.js', '.jsx', '.json' ],
-      modules   : [ path.resolve(absWorkspace, 'src/libs'), 'node_modules' ],
+      modules   : [ path.resolve(absWorkspace, 'src/library'), 'node_modules' ],
       alias     : {
         '@utils': path.join(absWorkspace, 'src/utils'),
         '@env'  : path.join(absWorkspace, 'src/env'),
@@ -45,14 +45,9 @@ export default function BuiltIn({ workspace = '.' }) {
           use : {
             loader : 'babel-loader',
             options: {
-              presets : [
-                '@babel/preset-env',
-                '@babel/preset-react'
-              ],
-              plugins : [
-                '@babel/plugin-proposal-class-properties',
-                '@babel/plugin-transform-runtime'
-              ],
+              cacheDirectory: true,
+              presets       : [ '@babel/preset-env', '@babel/preset-react' ],
+              plugins       : [ '@babel/plugin-proposal-class-properties', '@babel/plugin-transform-runtime' ],
             },
           },
           include : path.join(absWorkspace, 'src'),
@@ -62,7 +57,12 @@ export default function BuiltIn({ workspace = '.' }) {
         {
           test: /\.s?css$/,
           use : [{
-            loader : MiniCssExtractPlugin.loader, options: { reloadAll: true },
+            loader : MiniCssExtractPlugin.loader,
+            options: {
+              // reloadAll : true,
+              // publicPath: '../',
+              // hmr       : process.env.NODE_ENV === 'development',
+            },
           }, {
             loader : 'css-loader', options: { importLoaders: 1 },
           }, {
@@ -78,6 +78,19 @@ export default function BuiltIn({ workspace = '.' }) {
             loader : 'css-loader', options: { importLoaders: 1 },
           }, {
             loader : 'less-loader',
+          }],
+        },
+
+        {
+          test: /\.(jpg|png|gif|bmp|jpeg)$/,
+          use : [{
+            loader : 'url-loader',
+            options: {
+              esModule  : false,
+              limit     : 8192,
+              publicPath: '../../',
+              name      : 'static/images/[name].[ext]',
+            },
           }],
         },
       ],
@@ -170,6 +183,7 @@ export default function BuiltIn({ workspace = '.' }) {
 
       return {
         hashSalt     : 'Oulate X',
+        publicPath   : '',
         ...userOutput,
         path         : path.join(absWorkspace, userOutput.path),
         filename     : 'static/js/[name].[chunkhash:6].js',
