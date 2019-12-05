@@ -24,7 +24,8 @@ xrosy
 xrosy
   .command('build <workspace>')
   .description('编译模式')
-  .option('-e, --env           <env flag>', '指定环境变量标识')
+  .option('-s, --service', '在打包编译完成后启动Web服务器')
+  .option('-e, --env           <env_flag>', '指定环境变量标识')
   .option('-d, --dist-dir      <dist_path>', '指定打包输出的目录。（默认：--dist-dir=dist）')
   .option('-N, --app-names     <app_names>', '指定需要打包的app模块名称。（默认: --app-name=all）')
   .action(buildActivity)

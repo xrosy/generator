@@ -4,12 +4,17 @@ import { readSync as loadYaml } from 'node-yaml';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import CleanWebpackPlugin from 'clean-webpack-plugin';
 
 import * as utils from './utils.js';
+import WPServer from './WPServer.js';
+import {
+  MODE_DEVELOPMENT,
+  MODE_PRODUCTION
+} from './constant';
 
 
 const { logger: console } = utils;
-
 
 const CUSTOM_FILENAME = '.xrosyrc';
 const BROWSERS = [
@@ -28,10 +33,11 @@ const BROWSERS = [
 
 export default function BuiltIn({ mode, workspace = '.' }) {
   const absWorkspace = path.resolve(workspace);
-
-  const builtMode = mode === 'dev' ? 'development' : 'production';
-
   const { apps, ...userConfigs } = loadYaml(path.join(absWorkspace, CUSTOM_FILENAME));
+
+  const builtMode = mode === 'dev' ? MODE_DEVELOPMENT : MODE_PRODUCTION;
+  const MiniCssExtractPluginLoader = { loader: MiniCssExtractPlugin.loader, options: { reloadAll: false, publicPath: '../', hmr: mode === 'dev' }};
+
 
   class WPConfig {
 
@@ -69,16 +75,22 @@ export default function BuiltIn({ mode, workspace = '.' }) {
             cacheDirectory: true,
             presets       : [
               [ '@babel/preset-env', {
-                modules    : false,
-                useBuiltIns: 'usage',
-                targets    : {
+                /* 将此参数设置为false,既将module交由webpack处理，而不是babel */
+                modules: false, // 'commonjs', 'amd', 'umd', 'systemjs', 'auto'
+                // useBuiltIns     : 'usage',
+                // corejs          : '3.4.7',
+                // shippedProposals: true,
+                targets: {
                   browsers : BROWSERS,
                 },
               }],
               [ '@babel/preset-react', {
               }]
             ],
-            plugins : [ '@babel/plugin-proposal-class-properties', '@babel/plugin-transform-runtime' ],
+            plugins : [
+              '@babel/plugin-proposal-class-properties',
+              [ '@babel/plugin-transform-runtime', { corejs: 3, helpers: true }]
+            ],
           },
         },
         include : path.join(absWorkspace, 'src'),
@@ -87,14 +99,7 @@ export default function BuiltIn({ mode, workspace = '.' }) {
 
       {
         test: /\.s?css$/,
-        use : [{
-          loader : MiniCssExtractPlugin.loader,
-          options: {
-            // reloadAll : true,
-            // publicPath: '../',
-            // hmr       : process.env.NODE_ENV === 'development',
-          },
-        }, {
+        use : [ MiniCssExtractPluginLoader, {
           loader : 'css-loader', options: { importLoaders: 1 },
         }, {
           loader : 'sass-loader', options: {},
@@ -103,9 +108,7 @@ export default function BuiltIn({ mode, workspace = '.' }) {
 
       {
         test: /\.less$/,
-        use : [{
-          loader : MiniCssExtractPlugin.loader, options: { reloadAll: true },
-        }, {
+        use : [ MiniCssExtractPluginLoader, {
           loader : 'css-loader', options: { importLoaders: 1 },
         }, {
           loader : 'less-loader',
@@ -125,6 +128,12 @@ export default function BuiltIn({ mode, workspace = '.' }) {
         }],
       }],
     };
+
+    performance = (() => {
+      if (this !== 1112) return false;
+
+      return { hints: 'warning' };
+    })();
 
     optimization = {
       minimize         : true,
@@ -191,10 +200,6 @@ export default function BuiltIn({ mode, workspace = '.' }) {
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks : 5,
       }),
-
-      // new webpack.optimize.OccurrenceOrderPlugin(),
-      // new webpack.HotModuleReplacementPlugin(),
-      // new webpack.NoEmitOnErrorsPlugin(),
     ];
 
     output = (function() {
@@ -218,18 +223,33 @@ export default function BuiltIn({ mode, workspace = '.' }) {
       this.optimization.noEmitOnErrors = true;
 
       this.initEntries();
+
+      if (builtMode === MODE_DEVELOPMENT) {
+        this.plugins.unshift(new CleanWebpackPlugin({
+          cleanStaleWebpackAssets     : true,
+          cleanOnceBeforeBuildPatterns: [ this.output.path ],
+        }));
+
+        this.plugins.push(
+          new webpack.optimize.OccurrenceOrderPlugin(),
+          new webpack.HotModuleReplacementPlugin(),
+          new webpack.NoEmitOnErrorsPlugin()
+        );
+      }
     }
 
 
     initEntries() {
       const userApps = apps;
+      const isDevelopment = builtMode === MODE_DEVELOPMENT;
 
       Object.keys(userApps).forEach((name) => {
         const basic = path.join(absWorkspace, 'src', 'apps', userApps[name]);
-        this.entry[name] = path.join(basic, 'main.js');
+        const etr = path.join(basic, 'main.js');
+
+        this.entry[name] = isDevelopment ? [ 'webpack-hot-middleware/client?noInfo=true&reload=true', etr ] : etr;
 
         this.plugins = this.plugins || [];
-
         this.plugins.push(
           new HtmlWebpackPlugin({
             chunks            : [ 'runtime', 'framework.depend', 'framework.commons', name ],
@@ -253,8 +273,15 @@ export default function BuiltIn({ mode, workspace = '.' }) {
 
   }
 
+  const wpCompiler = webpack(new WPConfig());
 
-  webpack(new WPConfig()).run((err, stats) => {
+  // develop service
+  if (builtMode === MODE_DEVELOPMENT) {
+    return WPServer(wpCompiler);
+  }
+
+  // build
+  wpCompiler.run((err, stats) => {
     // console.log(stats.toJson());
     const { errors } = stats.toJson();
     // console.warn(errors.toString());

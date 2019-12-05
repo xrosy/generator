@@ -31,7 +31,8 @@
     "release": "npx babel src -d release > /dev/null && echo \"Successfully compiled!\"",
     "init": "npx babel src -d release && oulate init ./_example",
     "dev:init": "npx babel src -d release && oulate init ./_example -f",
-    "dev:develop": "npx babel src -d release && bin/oulate dev --env=1 ./oulate-example"
+    "dev:develop": "npx babel src -d release && bin/oulate dev --env=1 ./oulate-example",
+    "dev:build": "npx babel src -d release && bin/oulate build --env=1 ./oulate-example"
   },
   "dependencies": {
     "@babel/core": "^7.7.4",
@@ -39,6 +40,8 @@
     "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "@babel/preset-react": "^7.7.4",
+    "@babel/runtime": "^7.7.4",
+    "@babel/runtime-corejs3": "^7.7.4",
     "@xrosy/cat": "^0.2.2",
     "@xrosy/command": "^0.1.0",
     "antd-mobile": "^2.3.1",
@@ -47,6 +50,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-minify": "^0.5.1",
     "clean-webpack-plugin": "^2.0.2",
+    "core-js": "^2.6.10",
     "css-loader": "^2.1.1",
     "dotenv": "^8.2.0",
     "eslint": "^5.16.0",

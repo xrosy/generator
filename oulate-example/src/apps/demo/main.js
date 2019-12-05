@@ -16,8 +16,13 @@ console.log(env.DOMAIN);
 
 ReactDOM.render(
   <h1>
-  Hello Word, DEMO
+  Hello Word, DEMOsss
     <Pages name="demo" />
   </h1>,
   document.getElementById('root')
 );
+
+
+if (module.hot) {
+  module.hot.accept();
+}

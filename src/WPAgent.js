@@ -72,6 +72,7 @@ export const initActivity = (directory, {
 export const buildActivity = (workspace, { env, _name: mode, _description: description, parent: { _version: version }, ...args }) => {
   // console.log(args);
   cat.clear();
+  cat.debug('mode', mode);
 
   BuiltIn({ workspace, env, mode, description, version });
 };
