@@ -12,10 +12,25 @@ const { logger: console } = utils;
 
 
 const CUSTOM_FILENAME = '.xrosyrc';
+const BROWSERS = [
+  'last 3 versions',
+  'ie >= 9',
+  'ie_mob >= 10',
+  'ff >= 30',
+  'chrome >= 34',
+  'safari >= 6',
+  'opera >= 12.1',
+  'ios >= 6',
+  'android >= 4.4',
+  'bb >= 10',
+  'and_uc 9.9'
+];
 
-
-export default function BuiltIn({ workspace = '.' }) {
+export default function BuiltIn({ mode, workspace = '.' }) {
   const absWorkspace = path.resolve(workspace);
+
+  const builtMode = mode === 'dev' ? 'development' : 'production';
+
   const { apps, ...userConfigs } = loadYaml(path.join(absWorkspace, CUSTOM_FILENAME));
 
   class WPConfig {
@@ -28,7 +43,8 @@ export default function BuiltIn({ workspace = '.' }) {
       return absWorkspace;
     }())
 
-    mode = 'development'; // "development" | "production" | "none"
+    // mode = 'development'; // "development" | "production" | "none"
+    mode = builtMode
 
     target = 'web';
 
@@ -51,8 +67,18 @@ export default function BuiltIn({ workspace = '.' }) {
           loader : 'babel-loader',
           options: {
             cacheDirectory: true,
-            presets       : [ '@babel/preset-env', '@babel/preset-react' ],
-            plugins       : [ '@babel/plugin-proposal-class-properties', '@babel/plugin-transform-runtime' ],
+            presets       : [
+              [ '@babel/preset-env', {
+                modules    : false,
+                useBuiltIns: 'usage',
+                targets    : {
+                  browsers : BROWSERS,
+                },
+              }],
+              [ '@babel/preset-react', {
+              }]
+            ],
+            plugins : [ '@babel/plugin-proposal-class-properties', '@babel/plugin-transform-runtime' ],
           },
         },
         include : path.join(absWorkspace, 'src'),
@@ -194,6 +220,7 @@ export default function BuiltIn({ workspace = '.' }) {
       this.initEntries();
     }
 
+
     initEntries() {
       const userApps = apps;
 
@@ -228,9 +255,11 @@ export default function BuiltIn({ workspace = '.' }) {
 
 
   webpack(new WPConfig()).run((err, stats) => {
-    // const { errors } = stats.toJson();
+    // console.log(stats.toJson());
+    const { errors } = stats.toJson();
     // console.warn(errors.toString());
-    // cat.error(stats);
+    console.primary('耗时:', (+stats.endTime - +stats.startTime) / 1000, '秒');
+    // console.error(stats.endTime);
     // cat.error(Object.keys(stats.compilation));
   });
 }

@@ -11,6 +11,19 @@
     "generator"
   ],
   "main": "./release/main.js",
+  "files": [
+    "bin/",
+    "release/",
+    "resource/",
+    ".env",
+    ".babelrc",
+    ".eslintignore",
+    ".eslintrc",
+    ".gitignore",
+    "Dockerfile",
+    "package.json",
+    "README.md"
+  ],
   "bin": {
     "oulate": "bin/oulate"
   },
