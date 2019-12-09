@@ -1,46 +1,68 @@
 import path from 'path';
+import fs from 'fs';
 
 import express from 'express';
 import wpDevMiddleware from 'webpack-dev-middleware';
 import wpHotMiddleware from 'webpack-hot-middleware';
 
+// import proxy from 'http-proxy-middleware';
+// import cons from 'consolidate';
+
+import { logger } from './utils.js';
 import { DEFAULT_SERVICE_PORT } from './constant';
+import router from './WPServer.router';
+
+const app = express();
+
 
 export default (wpCompiler) => {
   const {
     options: {
-      output: { path: opPath, publicPath: opPublicPath } = {},
+      output: {
+        path: opPath,
+        publicPath: opPublicPath,
+      } = {},
     } = {},
   } = wpCompiler;
-  const app = express();
 
-  // server.engine('html', ejs.renderFile);
-  app.set('views', opPath);
-  app.set('view engine', 'html');
+  // app.engine('html', require('express-art-template'));
+  // app.set('view engine', 'html');
+  // app.set('views', opPath);
 
-  app.use(
-    wpDevMiddleware(wpCompiler, {
-      publicPath : opPublicPath,
-      noInfo     : true,
-      writeToDisk: false,
-      headers    : { 'X-Custom-Header': 'yes' },
-      logLevel   : 'error',
-    })
-  );
+  const wpDevMiddlewareConf = {
+    publicPath : opPublicPath,
+    noInfo     : false,
+    writeToDisk: false,
+    headers    : { 'X-Custom-Header': 'yes' },
+    logLevel   : 'warn',
+    stats      : {
+      colors: true,
+      chunks: false,
+    },
+  };
 
-  app.use(
-    wpHotMiddleware(wpCompiler)
-  );
+  // app.use('/gmall', router);
 
-  app.use(express.static('.'));
+  app.use(wpDevMiddleware(wpCompiler, wpDevMiddlewareConf));
 
-  app.get('/', function(req, res) {
-    res.send('hello world');
+  app.use(wpHotMiddleware(wpCompiler));
+
+  app.get([ '/gmall', '/gmall/*' ], (req, res, next) => {
+    res.redirect('/gmall.html');
   });
 
-  app.listen(DEFAULT_SERVICE_PORT, err => {
-    if (err) return console.log(err);
+  // app.get('/', (req, res) => res.redirect('defaultRedirect'));
 
-    console.info(`Listening on port :3000. Open up http://0.0.0.0:${DEFAULT_SERVICE_PORT}/ in your browser.`);
+  app.use(express.static(opPath));
+
+  app.use(function(req, res) {
+    res.status(404).send('Sorry cant find that!');
+  });
+
+
+  app.listen(DEFAULT_SERVICE_PORT, err => {
+    if (err) return logger.log(err);
+
+    logger.primary(`Listening on port :${DEFAULT_SERVICE_PORT}. Open up http://127.0.0.1:${DEFAULT_SERVICE_PORT}/ in your browser.`);
   });
 };

@@ -1,9 +1,11 @@
 import xrosy from '@xrosy/command';
 
 import * as packageInfo from '../package.json';
-import { DEFAULT_ENV, DEFAULT_SERVICE_PORT } from './WPConst.js';
 import { initActivity, buildActivity } from './WPAgent.js';
+import { DEFAULT_ENV, DEFAULT_SERVICE_PORT } from './constant.js';
 
+// const DEFAULT_ENV = 'dev';
+// const DEFAULT_SERVICE_PORT = 3000;
 
 xrosy
   .command('init <directory>')

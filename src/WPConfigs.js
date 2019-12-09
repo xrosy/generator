@@ -36,7 +36,14 @@ export default function BuiltIn({ mode, workspace = '.' }) {
   const { apps, ...userConfigs } = loadYaml(path.join(absWorkspace, CUSTOM_FILENAME));
 
   const builtMode = mode === 'dev' ? MODE_DEVELOPMENT : MODE_PRODUCTION;
-  const MiniCssExtractPluginLoader = { loader: MiniCssExtractPlugin.loader, options: { reloadAll: false, publicPath: '../', hmr: mode === 'dev' }};
+  const MiniCssExtractPluginLoader = {
+    loader : MiniCssExtractPlugin.loader,
+    options: {
+      reloadAll : false,
+      publicPath: '../',
+      hmr       : builtMode === MODE_DEVELOPMENT,
+    },
+  };
 
 
   class WPConfig {
@@ -58,7 +65,7 @@ export default function BuiltIn({ mode, workspace = '.' }) {
 
     resolve = {
       mainFiles : [ 'index', 'main' ],
-      extensions: [ '.js', '.jsx', '.json' ],
+      extensions: [ '.jsx', '.js', '.json' ],
       modules   : [ path.resolve(absWorkspace, 'src/library'), 'node_modules' ],
       alias     : {
         '@utils': path.join(absWorkspace, 'src/utils'),
@@ -136,7 +143,7 @@ export default function BuiltIn({ mode, workspace = '.' }) {
     })();
 
     optimization = {
-      minimize         : true,
+      minimize         : false,
       namedChunks      : true,
       runtimeChunk     : 'single', // 'multiple'
       removeEmptyChunks: true,
@@ -213,6 +220,7 @@ export default function BuiltIn({ mode, workspace = '.' }) {
         hashSalt     : 'Oulate X',
         publicPath   : '',
         ...userOutput,
+        // path         : builtMode === MODE_DEVELOPMENT ? '/var/tmp/@xrosy/generator' : path.join(absWorkspace, userOutput.path),
         path         : path.join(absWorkspace, userOutput.path),
         filename     : 'js/[name].js',
         chunkFilename: 'js/[name].js',
@@ -250,6 +258,7 @@ export default function BuiltIn({ mode, workspace = '.' }) {
         this.entry[name] = isDevelopment ? [ 'webpack-hot-middleware/client?noInfo=true&reload=true', etr ] : etr;
 
         this.plugins = this.plugins || [];
+
         this.plugins.push(
           new HtmlWebpackPlugin({
             chunks            : [ 'runtime', 'framework.depend', 'framework.commons', name ],

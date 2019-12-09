@@ -1,9 +1,9 @@
 {
-  "name": "@oulate/generator",
+  "name": "@xrosy/generator",
   "version": "0.1.1",
   "author": "ChenZhenyuan <jason@chenzhenyuan.com>",
   "license": "MIT",
-  "description": "the generator of XRosy FE.",
+  "description": "The generator of xrosy.",
   "repository": "https://github.com/xrosy/generator",
   "private": false,
   "keywords": [
@@ -25,14 +25,14 @@
     "README.md"
   ],
   "bin": {
-    "oulate": "bin/oulate"
+    "xrosy": "bin/xrosy"
   },
   "scripts": {
-    "release": "npx babel src -d release > /dev/null && echo \"Successfully compiled!\"",
+    "release": "rm -rf ./release && npx babel src -d release",
     "init": "npx babel src -d release && oulate init ./_example",
-    "dev:init": "npx babel src -d release && oulate init ./_example -f",
-    "dev:develop": "npx babel src -d release && bin/oulate dev --env=1 ./oulate-example",
-    "dev:build": "npx babel src -d release && bin/oulate build --env=1 ./oulate-example"
+    "dev:init": "npx babel src -d release && bin/xrosy init ./_example -f",
+    "dev:develop": "npx babel src -d release && bin/xrosy dev --env=dev ./oulate-example",
+    "dev:build": "npx babel src -d release && bin/xrosy build --env=uat ./oulate-example"
   },
   "dependencies": {
     "@babel/core": "^7.7.4",
@@ -45,11 +45,13 @@
     "@xrosy/cat": "^0.2.2",
     "@xrosy/command": "^0.1.0",
     "antd-mobile": "^2.3.1",
+    "art-template": "^4.13.2",
     "autoprefixer": "^9.7.2",
     "babel-loader": "^8.0.6",
     "babel-polyfill": "^6.26.0",
     "babel-preset-minify": "^0.5.1",
     "clean-webpack-plugin": "^2.0.2",
+    "consolidate": "^0.15.1",
     "core-js": "^2.6.10",
     "css-loader": "^2.1.1",
     "dotenv": "^8.2.0",
@@ -58,8 +60,10 @@
     "eslint-loader": "^2.2.1",
     "eslint-plugin-babel": "^5.3.0",
     "express": "^4.17.1",
+    "express-art-template": "^1.0.1",
     "file-loader": "^5.0.2",
     "html-webpack-plugin": "^3.2.0",
+    "http-proxy-middleware": "^0.20.0",
     "js-yaml": "^3.13.1",
     "json-loader": "^0.5.7",
     "json5-loader": "^1.0.1",
@@ -79,6 +83,8 @@
     "react-transform-catch-errors": "^1.0.2",
     "react-transform-hmr": "^1.0.4",
     "redux": "^4.0.4",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
     "sass-loader": "^8.0.0",
     "scss": "^0.2.4",
     "style-loader": "^0.23.1",
