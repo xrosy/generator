@@ -1,0 +1,16 @@
+<!--
+
+@update: <%= compile_date %>
+@Author: Jayne Chen <jason#chenzhenyuan.com>
+
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Web Application</title>
+  </head>
+
+  <body><div id="rootContainer"></div></body>
+</html>

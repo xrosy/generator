@@ -3,7 +3,7 @@ import path from 'path';
 import fs from 'fs';
 
 import * as utils from './utils.js';
-import BuiltIn from './WPConfigs.js';
+import builtIn from './WPConfigs.js';
 
 const cat = utils.logger;
 
@@ -69,12 +69,21 @@ export const initActivity = (directory, {
 
 
 /* 导出 build 接口 */
-export const buildActivity = (workspace, { env, _name: mode, _description: description, parent: { _version: version }, ...args }) => {
-  // console.log(args);
-  cat.clear();
+export const buildActivity = (workspace, {
+  env,
+  serverPort:serverport = 3000,
+  _name: mode,
+  _description: description,
+  parent: {
+    _version: version,
+  },
+  ...args
+}) => {
+  // return console.log(args);
 
+  cat.clear();
   cat.debug(utils.PKG_NAME, `v${version}`);
   cat.debug('mode:', mode, `(${description})`);
 
-  BuiltIn({ workspace, env, mode, description, version });
+  builtIn({ workspace, env, mode, description, version, serverport });
 };

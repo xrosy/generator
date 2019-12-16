@@ -15,16 +15,16 @@ xrosy
 
 
 xrosy
-  .command('dev <workspace>')
+  .command('dev [workspace]')
   .description('开发模式')
   .option('-e, --env <env>', `指定环境变量标识 (默认：${DEFAULT_ENV})`)
-  .option('-p, --port <port>', `设置映射的端口号 (默认: ${DEFAULT_SERVICE_PORT})`)
+  .option('-p, --server-port <port>', `设置映射的端口号 (默认: ${DEFAULT_SERVICE_PORT})`)
   .action(buildActivity)
   .on('--help', () => {});
 
 
 xrosy
-  .command('build <workspace>')
+  .command('build [workspace]')
   .description('编译模式')
   .option('-s, --service', '在打包编译完成后启动Web服务器')
   .option('-e, --env           <env_flag>', '指定环境变量标识')

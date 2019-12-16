@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "baseUrl": "",
+    // 配置可以跳转的定义
+    "paths": {
+      "src/*": ["src/*"],
+
+      "@utils": ["src/utils"],
+      "@utils/*": ["src/utils/*"],
+
+      "@Gui": ["src/gui"],
+      "@Gui/*": ["src/gui/*"],
+
+      "library": ["src/library"],
+      "library/*": ["src/library/*"]
+    }
+  }
+}
