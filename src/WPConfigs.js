@@ -86,8 +86,9 @@ export default function BuiltIn({
       extensions: [ '.jsx', '.js', '.json' ],
       modules   : [ path.resolve(absWorkspace, 'src/library'), 'node_modules' ],
       alias     : {
-        '@utils': path.join(absWorkspace, 'src/utils'),
+        'src'   : path.join(absWorkspace, 'src'),
         '@env'  : path.join(absWorkspace, 'src/env'),
+        '@utils': path.join(absWorkspace, 'src/utils'),
         ...{ ...userAlias },
       },
     };
@@ -102,11 +103,11 @@ export default function BuiltIn({
             presets       : [
               [ '@babel/preset-env', {
                 /* 将此参数设置为false,既将module交由webpack处理，而不是babel */
-                modules: 'auto', // 'commonjs', 'amd', 'umd', 'systemjs', 'auto'
-                // useBuiltIns     : 'usage',
-                corejs : '3.4.7',
+                modules    : 'auto', // 'commonjs', 'amd', 'umd', 'systemjs', 'auto'
+                useBuiltIns: 'usage',
+                corejs     : '3.4.7',
                 // shippedProposals: true,
-                targets: {
+                targets    : {
                   browsers : BROWSERS,
                 },
               }],
