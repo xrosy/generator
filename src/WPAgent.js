@@ -75,10 +75,10 @@ export const initActivity = (directory, {
 
 /* 导出 build 接口 */
 export const buildActivity = (work = '.', {
-  mode        : serverMode,
   env     = DEFAULT_ENV,
   port    = SERVER_PORT,
   service = false,
+
   _name       : mode,
   _description: description,
   parent      : {
@@ -86,6 +86,8 @@ export const buildActivity = (work = '.', {
   },
   ...args
 }) => {
+  console.log(args);
+
   switch (mode.toLowerCase()) {
     case 'dev':
     case 'build': {
@@ -99,17 +101,15 @@ export const buildActivity = (work = '.', {
 
       console.log({ ...wpConfigs });
 
-      server({ mode, env, port });
+      if (mode.toLowerCase() === 'build') return;
+
+      server({ env, port, mode });
 
       return;
     }
 
     case 'server': {
-      server({
-        mode : serverMode,
-        env,
-        port,
-      });
+      server({ env, port, ...args });
 
       return;
     }

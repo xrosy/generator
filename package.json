@@ -32,8 +32,9 @@
     "release": "rm -rf ./release && npx babel src -d release",
     "init": "npx babel src -d release && oulate init ./_example",
     "dev:init": "npx babel src -d release && bin/xrosy init ./_example -f",
-    "dev:develop": "npx babel src -d release && bin/xrosy dev --env=dev ./oulate-example",
-    "dev:build": "npx babel src -d release && bin/xrosy build --env=uat ./oulate-example"
+    "dev:develop": "npx babel src -d release && bin/xrosy dev --env=develop ./oulate-example",
+    "dev:build": "npx babel src -d release && bin/xrosy build --env=uat ./oulate-example",
+    "dev:server": "babel-node src/main.js server --server-port=9000 --env=$TERM_PROGRAM"
   },
   "dependencies": {
     "@babel/core": "^7.7.4",
@@ -76,6 +77,7 @@
     "localforage": "^1.7.3",
     "mini-css-extract-plugin": "^0.8.0",
     "mockjs": "^1.1.0",
+    "morgan": "^1.9.1",
     "node-sass": "^4.13.0",
     "node-yaml": "^4.0.1",
     "postcss-loader": "^3.0.0",

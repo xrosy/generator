@@ -12,9 +12,13 @@ import devServer from './server.dev';
 
 
 export default ({
-  mode = 'dev',
-  env = '',
-  port = SERVER_PORT,
+  // xrosy server --mode=<develop|production>
+  mode = 'develop',
+  // xrosy server --env=<env>
+  env,
+  // xrosy server --port=<port>
+  port,
+  // xrosy server --api-server=<url string>
   apiServer = null,
 }) => {
   const server = express();
@@ -22,6 +26,7 @@ export default ({
   server.engine('html', require('express-art-template'));
   server.set('view engine', 'html');
 
+  console.log(mode);
 
   if (mode.toLowerCase() === 'prd' || mode.toLowerCase() === 'production') {
     server.use(prdServer());
