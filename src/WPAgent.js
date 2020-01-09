@@ -4,16 +4,71 @@
 import path from 'path';
 import fs from 'fs';
 
+import webpack from 'webpack';
+
 import { DEFAULT_ENV, SERVER_PORT } from './constant';
 import * as utils from './utils.js';
-import * as wpConfigs from './wpc';
+// import * as wpConfigs from './wpc';
 import server from './server';
-import builtIn from './WPConfigs.js';
-
+import webpackConfigs from './WPConfigs.js';
 
 const console = utils.logger;
 
 const PRO_DIRECTORY_LIST = [ 'library', 'documents', 'static', 'src', 'src/apps', 'src/configs', 'src/server', 'src/utils', 'test' ];
+
+/* 导出 build 接口 */
+export const buildActivity = (work = '.', {
+  env     = DEFAULT_ENV,
+  port    = SERVER_PORT,
+  service = false,
+
+  _name       : mode,
+  _description: description,
+  parent      : { _version: version },
+
+  ...args
+}) => {
+  const wpConfigs = webpackConfigs({ env, mode, productDirectory: work });
+  const wpCompiler = webpack({
+    ...wpConfigs,
+    stats : 'verbose',
+  });
+
+
+  switch (mode.toLowerCase()) {
+    case 'dev':
+    case 'build': {
+      // console.clear();
+      console.debug('mode     :', `${description ? `${description} - ${mode}` : mode }`);
+      console.debug('version  :', `v${version}`);
+      console.debug('env      :', `${env}`);
+      console.debug('workspace:', `${process.cwd()}`);
+      console.debug('port     :', `${port}`);
+
+
+      if (mode.toLowerCase() === 'build' && service === false) return;
+
+      server({ wpCompiler, env, port, mode: wpConfigs.mode });
+
+      return;
+    }
+
+    case 'server': {
+      server({ wpCompiler, env, port, ...args });
+
+      return;
+    }
+  }
+
+
+  // builtIn({ workspace, env, mode, description, version, serverport, service });
+};
+
+
+export const serverActivity = ({ ...options }) => {
+  server(options);
+};
+
 
 /* 导出 init 接口 */
 export const initActivity = (directory, {
@@ -71,55 +126,4 @@ export const initActivity = (directory, {
       'eslint-config-xrosy': '^0.1.52',
     },
   }, null, 2));
-};
-
-/* 导出 build 接口 */
-export const buildActivity = (work = '.', {
-  env     = DEFAULT_ENV,
-  port    = SERVER_PORT,
-  service = false,
-
-  _name       : mode,
-  _description: description,
-  parent      : {
-    _version: version,
-  },
-  ...args
-}) => {
-  console.log(args);
-
-  switch (mode.toLowerCase()) {
-    case 'dev':
-    case 'build': {
-      console.log('sss');
-      console.clear();
-      console.debug('mode     :', `${description ? `${description} - ${mode}` : mode }`);
-      console.debug('version  :', `v${version}`);
-      console.debug('env      :', `${env}`);
-      console.debug('workspace:', `${process.cwd()}`);
-      console.debug('port     :', `${port}`);
-
-      console.log({ ...wpConfigs });
-
-      if (mode.toLowerCase() === 'build') return;
-
-      server({ env, port, mode });
-
-      return;
-    }
-
-    case 'server': {
-      server({ env, port, ...args });
-
-      return;
-    }
-  }
-
-
-  // builtIn({ workspace, env, mode, description, version, serverport, service });
-};
-
-
-export const serverActivity = ({ ...options }) => {
-  server(options);
 };

@@ -8,6 +8,10 @@ import { logger as console } from '../utils.js';
 export default () => {
   const server = express.Router();
 
+  server.use('/favicon.ico', (req, res) => {
+    res.status(404).send('Sorry cant find it!');
+  });
+
   server.use((req, res, next) => {
     console.log('req.originalUrl1', req.originalUrl);
 

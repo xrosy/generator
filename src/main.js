@@ -9,7 +9,7 @@ import { DEFAULT_ENV, SERVER_PORT } from './constant.js';
 
 const OPT_ENV          = [ '-e, --env <env>', `指定环境变量标识 (默认：${DEFAULT_ENV})` ];
 const OPT_SERVER_PORT  = [ '-p, --port <server port>', `设置映射的端口号 (默认: ${SERVER_PORT})` ];
-const OPT_SERVER_MODE  = [ '-m, --mode <server mode>', '设定服务器模式 (可选项: pro|dev)' ];
+const OPT_SERVER_MODE  = [ '-m, --mode [server mode]', '设定服务器模式 (可选项: pro|dev)' ];
 const OPT_SERVER_AGENT = [ '--api-server <api uri>', '设置 api 代理地址' ];
 
 // const DEFAULT_ENV = 'dev';
@@ -28,6 +28,7 @@ xrosy
   .option(...OPT_ENV)
   .option(...OPT_SERVER_PORT)
   .action(buildActivity);
+
 xrosy
   .command('server')
   .option(...OPT_ENV)
