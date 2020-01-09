@@ -1,17 +1,13 @@
 /* eslint-disable max-nested-callbacks */
-/* eslint-disable no-multi-spaces */
-
 import path from 'path';
 import fs from 'fs';
 
-import { DEFAULT_ENV, SERVER_PORT } from './constant';
-import * as utils from './utils.js';
-import * as wpConfigs from './wpc';
 import server from './server';
+
+import * as utils from './utils.js';
 import builtIn from './WPConfigs.js';
 
-
-const console = utils.logger;
+const cat = utils.logger;
 
 const PRO_DIRECTORY_LIST = [ 'library', 'documents', 'static', 'src', 'src/apps', 'src/configs', 'src/server', 'src/utils', 'test' ];
 
@@ -24,17 +20,17 @@ export const initActivity = (directory, {
   const resource = utils.getResourceAbsolutePath();
   const project = path.resolve('.', directory);
 
-  console.info('Oulate version: ', utils.PKG_VERSION);
+  cat.info('Oulate version: ', utils.PKG_VERSION);
 
   /** 生成目录结构 */
 
   fs.mkdirSync(project, { recursive: recursive === true });
 
-  console.info('工程：', project);
+  cat.info('工程：', project);
 
   PRO_DIRECTORY_LIST.forEach((dir) => {
     utils.mkdirSync(path.resolve('.', directory, dir), { force: force === true, recursive: recursive === true });
-    console.success('创建：', path.join(directory, dir));
+    cat.success('创建：', path.join(directory, dir));
   });
 
   /** 复制必要文件到项目目录下 */
@@ -48,10 +44,10 @@ export const initActivity = (directory, {
 
     try {
       fs.copyFileSync(sf, tf, +!force);
-      console.success('创建：', path.join(directory, file));
+      cat.success('创建：', path.join(directory, file));
     }
     catch (err) {
-      console.error('失败：', path.join(directory, file), String(err.code).toUpperCase() === 'EEXIST' ? '\t#redBright([已存在])' : '');
+      cat.error('失败：', path.join(directory, file), String(err.code).toUpperCase() === 'EEXIST' ? '\t#redBright([已存在])' : '');
     }
   });
 
@@ -73,50 +69,24 @@ export const initActivity = (directory, {
   }, null, 2));
 };
 
+
 /* 导出 build 接口 */
-export const buildActivity = (work = '.', {
-  mode        : serverMode,
-  env     = DEFAULT_ENV,
-  port    = SERVER_PORT,
+export const buildActivity = (workspace, {
+  env,
   service = false,
-  _name       : mode,
+  serverPort:serverport = 3000,
+  _name: mode,
   _description: description,
-  parent      : {
+  parent: {
     _version: version,
   },
   ...args
 }) => {
-  switch (mode.toLowerCase()) {
-    case 'dev':
-    case 'build': {
-      console.log('sss');
-      console.clear();
-      console.debug('mode     :', `${description ? `${description} - ${mode}` : mode }`);
-      console.debug('version  :', `v${version}`);
-      console.debug('env      :', `${env}`);
-      console.debug('workspace:', `${process.cwd()}`);
-      console.debug('port     :', `${port}`);
+  cat.clear();
+  cat.debug(utils.PKG_NAME, `v${version}`);
+  cat.debug('mode:', mode, `(${description})`);
 
-      console.log({ ...wpConfigs });
-
-      server({ mode, env, port });
-
-      return;
-    }
-
-    case 'server': {
-      server({
-        mode : serverMode,
-        env,
-        port,
-      });
-
-      return;
-    }
-  }
-
-
-  // builtIn({ workspace, env, mode, description, version, serverport, service });
+  builtIn({ workspace, env, mode, description, version, serverport, service });
 };
 
 

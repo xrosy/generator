@@ -86,8 +86,11 @@ export default function BuiltIn({
     resolve = {
       mainFiles : [ 'index', 'main' ],
       extensions: [ '.jsx', '.js', '.json' ],
-      modules   : [ path.resolve(absWorkspace, 'src/library'), 'node_modules' ],
-      alias     : {
+      modules   : [
+        path.resolve(absWorkspace, 'src/library'),
+        'node_modules'
+      ],
+      alias : {
         'src'   : path.join(absWorkspace, 'src'),
         '@env'  : path.join(absWorkspace, 'src/env'),
         '@utils': path.join(absWorkspace, 'src/utils'),
@@ -96,78 +99,81 @@ export default function BuiltIn({
     };
 
     module = {
-      rules : [{
-        test: /\.jsx?$/,
-        use : {
-          loader : 'babel-loader',
-          options: {
-            cacheDirectory: true,
-            presets       : [
-              [ '@babel/preset-env', {
+      rules : [
+        {
+          test: /\.jsx?$/,
+          use : {
+            loader : 'babel-loader',
+            options: {
+              cacheDirectory: true,
+              presets       : [
+                [ '@babel/preset-env', {
                 /* 将此参数设置为false,既将module交由webpack处理，而不是babel */
-                modules    : 'auto', // 'commonjs', 'amd', 'umd', 'systemjs', 'auto'
-                useBuiltIns: 'usage',
-                corejs     : '3.4.7',
-                // shippedProposals: true,
-                targets    : {
-                  browsers : BROWSERS,
-                },
-              }],
-              [ '@babel/preset-react', {
-              }]
-            ],
-            plugins : [
-              '@babel/plugin-proposal-class-properties',
-              [ '@babel/plugin-transform-runtime', { corejs: 3, helpers: true }]
-            ],
+                  modules    : 'auto', // 'commonjs', 'amd', 'umd', 'systemjs', 'auto'
+                  useBuiltIns: 'usage',
+                  corejs     : '3.4.7',
+                  // shippedProposals: true,
+                  targets    : {
+                    browsers : BROWSERS,
+                  },
+                }],
+                [ '@babel/preset-react', {
+                }]
+              ],
+              plugins : [
+                '@babel/plugin-proposal-class-properties',
+                [ '@babel/plugin-transform-runtime', { corejs: 3, helpers: true }]
+              ],
+            },
           },
+          // include : path.join(absWorkspace, 'src'),
+          exclude : /(node_modules|bower_components)/,
         },
-        // include : path.join(absWorkspace, 'src'),
-        exclude : /(node_modules|bower_components)/,
-      },
 
-      {
-        test: /\.s?css$/,
-        use : [ MiniCssExtractPluginLoader, {
-          loader : 'css-loader', options: { importLoaders: 1 },
-        }, {
-          loader : 'sass-loader', options: {},
-        }],
-      },
+        {
+          test: /\.s?css$/,
+          use : [ MiniCssExtractPluginLoader, {
+            loader : 'css-loader', options: { importLoaders: 1 },
+          }, {
+            loader : 'sass-loader', options: {},
+          }],
+        },
 
-      {
-        test: /\.less$/,
-        use : [ MiniCssExtractPluginLoader, {
-          loader : 'css-loader', options: { importLoaders: 1 },
-        }, {
-          loader : 'less-loader',
-        }],
-      },
+        {
+          test: /\.less$/,
+          use : [ MiniCssExtractPluginLoader, {
+            loader : 'css-loader', options: { importLoaders: 1 },
+          }, {
+            loader : 'less-loader',
+          }],
+        },
 
-      {
-        test: /\.(jpg|png|gif|bmp|jpeg)$/,
-        use : [{
-          loader : 'url-loader',
-          options: {
-            esModule  : false,
-            limit     : 8192,
-            publicPath: '../',
-            name      : 'images/[hash:16].[ext]',
-          },
-        }],
-      },
-      {
-        test: /\.svg/,
-        use : [{
-          loader : 'url-loader',
-          options: {
-            esModule  : false,
-            limit     : 10,
-            publicPath: '../',
-            name      : 'images/[hash:16].[ext]',
-          },
-        }],
-      }],
+        {
+          test: /\.(jpg|png|gif|bmp|jpeg)$/,
+          use : [{
+            loader : 'url-loader',
+            options: {
+              esModule  : false,
+              limit     : 8192,
+              publicPath: '../',
+              name      : 'images/[hash:16].[ext]',
+            },
+          }],
+        },
+
+        {
+          test: /\.svg/,
+          use : [{
+            loader : 'url-loader',
+            options: {
+              esModule  : false,
+              limit     : 10,
+              publicPath: '../',
+              name      : 'images/[hash:16].[ext]',
+            },
+          }],
+        }
+      ],
     };
 
     performance = (() => {
