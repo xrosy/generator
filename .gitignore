@@ -90,3 +90,5 @@ typings/
 .dynamodb/
 
 oulate-example/
+
+release/
