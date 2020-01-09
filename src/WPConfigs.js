@@ -36,7 +36,9 @@ export default function BuiltIn({
   description,
   serverport,
   version,
+  service = false,
 }) {
+  const DEPLOY_ENV = process.env.DEPLOY_ENV.toLowerCase();
   const absWorkspace = path.resolve(workspace);
 
   const { apps, alias: userAlias = {}, ...userConfigs } = loadYaml(path.join(absWorkspace, CUSTOM_FILENAME));
@@ -223,9 +225,9 @@ export default function BuiltIn({
 
     plugins = [
       new webpack.DefinePlugin({
-        'env'                 : JSON.stringify('dev'),
-        'service.env'         : JSON.stringify('dev'),
-        'process.env.NODE_ENV': JSON.stringify('dev'),
+        'env'                 : JSON.stringify(DEPLOY_ENV),
+        'service.env'         : JSON.stringify(DEPLOY_ENV),
+        'process.env.NODE_ENV': JSON.stringify(DEPLOY_ENV),
       }),
 
       new MiniCssExtractPlugin({
@@ -351,7 +353,6 @@ export default function BuiltIn({
   // build
   webpack(wpConfigs).run((err, stats) => {
     // const { errors } = stats.toJson();
-
     // console.primary('耗时:', (+stats.endTime - +stats.startTime) / 1000, '秒');
   });
 }

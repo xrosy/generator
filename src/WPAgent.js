@@ -71,6 +71,7 @@ export const initActivity = (directory, {
 /* 导出 build 接口 */
 export const buildActivity = (workspace, {
   env,
+  service = false,
   serverPort:serverport = 3000,
   _name: mode,
   _description: description,
@@ -82,8 +83,9 @@ export const buildActivity = (workspace, {
   // return console.log(args);
 
   cat.clear();
+
   cat.debug(utils.PKG_NAME, `v${version}`);
   cat.debug('mode:', mode, `(${description})`);
 
-  builtIn({ workspace, env, mode, description, version, serverport });
+  builtIn({ workspace, env, mode, description, version, serverport, service });
 };

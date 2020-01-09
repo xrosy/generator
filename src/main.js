@@ -26,8 +26,9 @@ xrosy
 xrosy
   .command('build [workspace]')
   .description('编译模式')
-  .option('-s, --service', '在打包编译完成后启动Web服务器')
   .option('-e, --env           <env_flag>', '指定环境变量标识')
+  .option('-p, --server-port <port>', `设置映射的端口号 (默认: ${DEFAULT_SERVICE_PORT})`)
+  .option('-s, --service', '在打包编译完成后启动Web服务器')
   .option('-d, --dist-dir      <dist_path>', '指定打包输出的目录。（默认：--dist-dir=dist）')
   .option('-N, --app-names     <app_names>', '指定需要打包的app模块名称。（默认: --app-name=all）')
   .action(buildActivity)
