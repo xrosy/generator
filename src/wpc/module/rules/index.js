@@ -1,3 +1,24 @@
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+
+
+const MiniCssExtractPluginLoader = {
+  loader : MiniCssExtractPlugin.loader,
+  options: {
+    reloadAll : false,
+    publicPath: '../',
+    // hmr       : builtMode === MODE_DEVELOPMENT,
+  },
+};
+
+
+const $StyleRules = [
+  MiniCssExtractPluginLoader,
+  {
+    loader : 'css-loader',
+    options: { importLoaders: 1 },
+  }
+];
+
 
 const BROWSERS = [
   'last 3 versions',
@@ -12,7 +33,6 @@ const BROWSERS = [
   'bb >= 10',
   'and_uc 9.9'
 ];
-
 
 export default [
   {
@@ -43,5 +63,45 @@ export default [
     },
     // include : path.join(absWorkspace, 'src'),
     exclude : /(node_modules|bower_components)/,
+  },
+
+
+  {
+    test: /\.(jpg|png|gif|bmp|jpeg)$/,
+    use : [{
+      loader : 'url-loader',
+      options: {
+        esModule  : false,
+        limit     : 8192,
+        publicPath: '../',
+        name      : 'images/[hash:16].[ext]',
+      },
+    }],
+  },
+
+
+  {
+    test: /\.s?css$/,
+    use : [ ...$StyleRules, { loader: 'sass-loader' }],
+  },
+
+
+  {
+    test: /\.less$/,
+    use : [ ...$StyleRules, { loader: 'less-loader' }],
+  },
+
+
+  {
+    test: /\.svg$/,
+    use : [{
+      loader : 'url-loader',
+      options: {
+        esModule  : false,
+        limit     : 10,
+        publicPath: '../',
+        name      : 'images/[hash:16].[ext]',
+      },
+    }],
   },
 ];

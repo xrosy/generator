@@ -1,3 +1,5 @@
 
+import rules from './rules';
 
-export { default as rules } from './rules';
+
+export default { rules };
