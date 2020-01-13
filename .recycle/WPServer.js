@@ -9,7 +9,7 @@ import httpProxy from 'http-proxy-middleware';
 // import proxy from 'http-proxy-middleware';
 // import cons from 'consolidate';
 
-import { logger } from './utils.js';
+import { logger } from './utils.js.js';
 // import { DEFAULT_SERVICE_PORT } from './constant';
 // import router from './WPServer.router';
 

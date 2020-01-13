@@ -28,6 +28,8 @@ export const buildActivity = (work = '.', {
 
   ...args
 }) => {
+  console.log(work);
+
   const wpConfigs = webpackConfigs({ env, mode, productDirectory: work });
   const wpCompiler = webpack({
     ...wpConfigs,

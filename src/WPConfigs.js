@@ -44,7 +44,7 @@ function $GetHtmlWebpackPlugin() {
 }
 
 function $GetProductDirectory(pd) {
-  return path.join(process.cwd(), pd);
+  return path.resolve(pd);
 }
 
 function $GetProfileContent(context) {

@@ -15,8 +15,6 @@ export const DEFAULT_ENV = process.env.XROSY_ENV || process.env.NODE_ENV || 'xxx
 
 export const DEFAULT_SERVICE_PORT = process.env.SERVICE_PORT;
 
-export const DEFAULT_DIST_PATH = 'dist';
-
 export const CONST_SS = {};
 
 export const SERVER_PORT = 3000;

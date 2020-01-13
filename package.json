@@ -1,6 +1,6 @@
 {
   "name": "@xrosy/generator",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "author": "ChenZhenyuan <jason@chenzhenyuan.com>",
   "license": "MIT",
   "description": "The generator of xrosy.",
@@ -20,6 +20,7 @@
     ".eslintignore",
     ".eslintrc",
     ".gitignore",
+    "404.html",
     "Dockerfile",
     "package.json",
     "view.art",
