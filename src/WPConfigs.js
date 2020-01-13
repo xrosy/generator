@@ -64,7 +64,7 @@ function $GetModuleRules(mode) {
     loader : MiniCssExtractPlugin.loader,
     options: {
       reloadAll : false,
-      publicPath: '../',
+      publicPath: '/',
       hmr       : mode === CONST_DEVELOPMENT,
     },
   };
@@ -116,9 +116,8 @@ function $GetModuleRules(mode) {
           options: {
             esModule  : false,
             limit     : 8192,
-            publicPath: '../',
-            outputPath: 'images',
-            name      : '[hash:16].[ext]',
+            publicPath: '/',
+            name      : 'images/[hash:16].[ext]',
           },
         },
         // {

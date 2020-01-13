@@ -30,7 +30,7 @@ xrosy
   .action(buildActivity);
 
 xrosy
-  .command('server')
+  .command('server [workspace]')
   .option(...OPT_ENV)
   .option(...OPT_SERVER_PORT)
   .option(...OPT_SERVER_MODE)

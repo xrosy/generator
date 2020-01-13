@@ -11,7 +11,7 @@ export const CONST_WEBPACK_HOT = 'webpack-hot-middleware/client?noInfo=true&relo
 
 export const BROWSERS = [ 'last 3 versions', 'ie >= 9', 'ie_mob >= 10', 'ff >= 30', 'chrome >= 34', 'safari >= 6', 'opera >= 12.1', 'ios >= 6', 'android >= 4.4', 'bb >= 10', 'and_uc 9.9' ];
 
-export const DEFAULT_ENV = process.env.XROSY_ENV || process.env.NODE_ENV || 'xxxxx';
+export const DEFAULT_ENV = process.env.XROSY_ENV || process.env.NODE_ENV || '';
 
 export const DEFAULT_SERVICE_PORT = process.env.SERVICE_PORT;
 

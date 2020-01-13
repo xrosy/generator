@@ -69,7 +69,8 @@ export const buildActivity = (work = '.', {
         wpCompiler,
         env,
         port,
-        mode : wpConfigs.mode,
+        mode     : wpConfigs.mode,
+        isService: false,
       });
 
       return;
@@ -81,7 +82,10 @@ export const buildActivity = (work = '.', {
         env,
         port,
         mode : mode === CONST_PRODUCTION ? CONST_PRODUCTION : CONST_DEVELOPMENT,
+
         ...args,
+
+        isService : true,
       });
 
       return;
