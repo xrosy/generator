@@ -2,11 +2,12 @@
 import path from 'path';
 
 import express from 'express';
-import history from 'connect-history-api-fallback';
+import morgan from 'morgan';
 import webpack from 'webpack';
 import wpDevMiddleware from 'webpack-dev-middleware';
 import wpHotMiddleware from 'webpack-hot-middleware';
-import morgan from 'morgan';
+import proxy from 'http-proxy-middleware';
+import history from 'connect-history-api-fallback';
 
 import { logger as console } from '../utils.js';
 import {
@@ -30,39 +31,52 @@ export default ({
   // xrosy server --api-server=<url string>
   apiServer = null,
 }) => {
-  const rootPath =
-    mode === CONST_DEVELOPMENT
-      ? wpCompiler.options.output.publicPath
-      : wpCompiler.options.output.path;
+  const isDevelopment = mode === CONST_DEVELOPMENT;
 
+  const rootPath = isDevelopment ? wpCompiler.options.output.publicPath : wpCompiler.options.output.path;
 
   const server = express();
 
   server.engine('html', require('express-art-template'));
   server.set('view engine', 'html');
-  // server.set('views', rootPath);
+  server.set('views', rootPath);
 
-  if (mode === CONST_DEVELOPMENT) {
+  if (isDevelopment === !0) {
     server.use(wpDevMiddleware(wpCompiler, {
-      publicPath : wpCompiler.options.output.publicPath,
+      publicPath : rootPath,
       noInfo     : false,
       writeToDisk: false,
       headers    : { 'X-Custom-Header': 'yes' },
+      logLevel   : 'warn',
+      // watchOptions: {},
     }));
 
-    server.use(wpHotMiddleware(wpCompiler, {}));
+    server.use(wpHotMiddleware(wpCompiler));
+
+    server.use(express.static(rootPath));
+
+    server.use(proxy({
+      target     : `http://127.0.0.1:${port}`,
+      pathRewrite: { '^/.*': '/index.html' },
+    }));
   }
   else {
-    // server.use(express.static('', ));
-    server.set('views', rootPath);
-    server.use(history({
-      rewrites : [{ form: /^\//, to: '/' }],
+    server.use(express.static(rootPath));
+
+    server.use(proxy({
+      target     : `http://127.0.0.1:${port}`,
+      pathRewrite: { '^/.*': '/index.html' },
     }));
 
-    server.get('/', (req, res, next) => {
-      res.render('index.html');
-    });
-
+    /*
+    server.use(history({
+      logger  : console.debug,
+      index   : 'index.html',
+      rewrites: [
+        { form: /^\/, to: '/' }
+      ],
+    }));
+    */
 
     wpCompiler.run((err, stats) => {
       const { startTime, endTime } = stats;
@@ -73,15 +87,16 @@ export default ({
     // server.use(prdServer());
   }
 
-  // server.use(express.static(rootPath));
-
-  // server.use('/favicon.ico', (req, res) => {
-  //   res.status(404).send('Sorry cant find that!');
-  // });
+  /*
+  server.use('/favicon.ico', (req, res) => {
+    res.status(404).send('Sorry cant find that!');
+  });
+  */
 
   server.use(function(req, res) {
     res.status(404).render(path.join(__dirname, '../../404.html'));
   });
+
 
   server.disable('x-powered-by');
   server.enable('trust proxy');

@@ -68,6 +68,7 @@ function $GetModuleRules(mode) {
       hmr       : mode === CONST_DEVELOPMENT,
     },
   };
+
   const $StyleRules = [
     MiniCssExtractPluginLoader,
     {
@@ -114,7 +115,7 @@ function $GetModuleRules(mode) {
           loader : 'url-loader',
           options: {
             esModule  : false,
-            limit     : 1,
+            limit     : 8192,
             publicPath: '../',
             outputPath: 'images',
             name      : '[hash:16].[ext]',
@@ -162,40 +163,42 @@ function $GetOutput({
 }
 
 function $GetPluginsList({ apps, mode, env, output, ...argv }) {
-  const plugins = [];
+  const isProduction = mode === CONST_PRODUCTION;
 
-  const debuggerPlugins = mode === CONST_PRODUCTION ? [] : [
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
-  ];
+  return (
+    []
+      .concat(
+        isProduction
+          ? [ new CleanWebpackPlugin({ cleanStaleWebpackAssets: true, cleanOnceBeforeBuildPatterns: [ output.path ]}) ]
+          : []
+      )
+      .concat([
+        new webpack.DefinePlugin({
+          env : JSON.stringify(env),
+        }),
 
-  if (mode === CONST_PRODUCTION) {
-    plugins.splice(0, 0, new CleanWebpackPlugin({
-      cleanStaleWebpackAssets     : true,
-      cleanOnceBeforeBuildPatterns: [ output.path ],
-    }));
-  }
+        // new I18nPlugin(languageConfig, optionsObj),
 
-  return plugins.concat([
-    new webpack.DefinePlugin({
-      env : JSON.stringify(env),
-    }),
+        new MiniCssExtractPlugin({
+          filename : 'styles/[name].css',
+        }),
 
-    // new I18nPlugin(languageConfig, optionsObj),
+        new webpack.optimize.LimitChunkCountPlugin({
+          maxChunks : 5,
+        }),
 
-    new MiniCssExtractPlugin({
-      filename : 'styles/[name].css',
-    }),
-
-    new webpack.optimize.LimitChunkCountPlugin({
-      maxChunks : 5,
-    }),
-
-    $GetHtmlWebpackPlugin(),
-
-    ...debuggerPlugins
-  ]);
+        $GetHtmlWebpackPlugin({ apps, mode, env, output, ...argv }),
+      ])
+      .concat(
+        isProduction
+          ? []
+          : [
+            new webpack.optimize.OccurrenceOrderPlugin(),
+            new webpack.HotModuleReplacementPlugin(),
+            new webpack.NoEmitOnErrorsPlugin()
+          ]
+      )
+  );
 }
 
 function $GetEntries({ apps, context, mode }) {
@@ -203,12 +206,12 @@ function $GetEntries({ apps, context, mode }) {
   const entryFile = path.join(context, apps[0], 'index.jsx');
 
 
-  return mode === CONST_DEVELOPMENT ? [ CONST_WEBPACK_HOT, entryFile ] : entryFile;
+  return {
+    main : mode === CONST_DEVELOPMENT ? [ CONST_WEBPACK_HOT, entryFile ] : entryFile,
+  };
 }
 
 function $GetOtimization(mode) {
-  console.log(mode);
-
   return {
     minimize         : true,
     namedChunks      : true,
@@ -245,18 +248,18 @@ function $GetOtimization(mode) {
           enforce           : true,
         },
 
-        'css' : {
-          name              : 'styles',
-          // filename          : '',
-          test              : /\.css$/,
-          chunks            : 'initial',
-          minChunks         : 1,
-          minSize           : 0,
-          priority          : -20,
-          // chunks            : 'all',
-          reuseExistingChunk: true,
-          enforce           : true,
-        },
+        // 'css' : {
+        //   name              : 'styles',
+        //   // filename          : '',
+        //   test              : /\.css$/,
+        //   chunks            : 'initial',
+        //   minChunks         : 1,
+        //   minSize           : 0,
+        //   priority          : -20,
+        //   // chunks            : 'all',
+        //   reuseExistingChunk: true,
+        //   enforce           : true,
+        // },
       },
     },
   };

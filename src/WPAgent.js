@@ -31,7 +31,8 @@ export const buildActivity = (work = '.', {
   const wpConfigs = webpackConfigs({ env, mode, productDirectory: work });
   const wpCompiler = webpack({
     ...wpConfigs,
-    stats : 'errors-only',
+    stats : 'minimal',
+
   });
 
 
