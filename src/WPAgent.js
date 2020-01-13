@@ -1,20 +1,20 @@
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable no-multi-spaces */
 
-import path from 'path';
-import fs from 'fs';
+import path                                                              from 'path';
+import fs                                                                from 'fs';
 
-import webpack from 'webpack';
+import webpack                                                           from 'webpack';
 
-import { DEFAULT_ENV, SERVER_PORT } from './constant';
-import * as utils from './utils.js';
-// import * as wpConfigs from './wpc';
-import server from './server';
-import webpackConfigs from './WPConfigs.js';
+import { CONST_DEVELOPMENT, CONST_PRODUCTION, DEFAULT_ENV, SERVER_PORT } from './constant';
+import * as utils                                                        from './utils.js';
+import server                                                            from './server';
+import webpackConfigs                                                    from './WPConfigs.js';
+
 
 const console = utils.logger;
-
 const PRO_DIRECTORY_LIST = [ 'library', 'documents', 'static', 'src', 'src/apps', 'src/configs', 'src/server', 'src/utils', 'test' ];
+
 
 /* 导出 build 接口 */
 export const buildActivity = (work = '.', {
@@ -31,14 +31,14 @@ export const buildActivity = (work = '.', {
   const wpConfigs = webpackConfigs({ env, mode, productDirectory: work });
   const wpCompiler = webpack({
     ...wpConfigs,
-    stats : 'verbose',
+    stats : 'errors-only',
   });
 
 
   switch (mode.toLowerCase()) {
     case 'dev':
     case 'build': {
-      // console.clear();
+      console.clear();
       console.debug('mode     :', `${description ? `${description} - ${mode}` : mode }`);
       console.debug('version  :', `v${version}`);
       console.debug('env      :', `${env}`);
@@ -46,15 +46,40 @@ export const buildActivity = (work = '.', {
       console.debug('port     :', `${port}`);
 
 
-      if (mode.toLowerCase() === 'build' && service === false) return;
+      if (mode.toLowerCase() === 'build' && service === false)  {
+        // return console.log(wpConfigs);
 
-      server({ wpCompiler, env, port, mode: wpConfigs.mode });
+        wpCompiler.run((err, stats) => {
+          const { startTime, endTime } = stats;
+
+          process.stdout.write(stats.toString({ colors: true, chunks: true }));
+          process.stdout.write('\n');
+
+          process.stdout.write(`Time     : ${(endTime - startTime) / 1000} 秒\n`);
+          process.stdout.write('Compile successful！\n');
+        });
+
+        return;
+      }
+
+      server({
+        wpCompiler,
+        env,
+        port,
+        mode : wpConfigs.mode,
+      });
 
       return;
     }
 
     case 'server': {
-      server({ wpCompiler, env, port, ...args });
+      server({
+        wpCompiler,
+        env,
+        port,
+        mode : mode === CONST_PRODUCTION ? CONST_PRODUCTION : CONST_DEVELOPMENT,
+        ...args,
+      });
 
       return;
     }
@@ -62,11 +87,6 @@ export const buildActivity = (work = '.', {
 
 
   // builtIn({ workspace, env, mode, description, version, serverport, service });
-};
-
-
-export const serverActivity = ({ ...options }) => {
-  server(options);
 };
 
 

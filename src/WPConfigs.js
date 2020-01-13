@@ -107,18 +107,26 @@ function $GetModuleRules(mode) {
       exclude : /(node_modules|bower_components)/,
     },
 
-
     {
-      test: /\.(jpg|png|gif|bmp|jpeg)$/,
-      use : [{
-        loader : 'url-loader',
-        options: {
-          esModule  : false,
-          limit     : 8192,
-          publicPath: '../',
-          name      : 'images/[hash:16].[ext]',
+      test: /\.(jpg|png|gif|bmp|jpeg|svg)$/,
+      use : [
+        {
+          loader : 'url-loader',
+          options: {
+            esModule  : false,
+            limit     : 1,
+            publicPath: '../',
+            outputPath: 'images',
+            name      : '[hash:16].[ext]',
+          },
         },
-      }],
+        // {
+        //   loader : 'image-webpack-loader',
+        //   options: {
+        //     bypassOnDebug : true,
+        //   },
+        // }
+      ],
     },
 
 
@@ -127,24 +135,10 @@ function $GetModuleRules(mode) {
       use : [ ...$StyleRules, { loader: 'sass-loader' }],
     },
 
-
     {
       test: /\.less$/,
       use : [ ...$StyleRules, { loader: 'less-loader' }],
-    },
-
-    {
-      test: /\.svg$/,
-      use : [{
-        loader : 'url-loader',
-        options: {
-          esModule  : false,
-          limit     : 10,
-          publicPath: '../',
-          name      : 'images/[hash:16].[ext]',
-        },
-      }],
-    },
+    }
   ];
 }
 
@@ -154,7 +148,7 @@ function $GetWebpackMode(mode) {
 
 function $GetOutput({
   built = CONST_BUILT_DIRECTORY,
-  publicPath = '',
+  publicPath = '/',
   hashSalt = 'Oulate-X',
   context,
 } = {}) {
@@ -167,16 +161,28 @@ function $GetOutput({
   };
 }
 
-function $GetPluginsList({ apps, mode, env }) {
-  return [
-    // new CleanWebpackPlugin({
-    //   cleanStaleWebpackAssets     : true,
-    //   cleanOnceBeforeBuildPatterns: [],
-    // }),
+function $GetPluginsList({ apps, mode, env, output, ...argv }) {
+  const plugins = [];
 
+  const debuggerPlugins = mode === CONST_PRODUCTION ? [] : [
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin()
+  ];
+
+  if (mode === CONST_PRODUCTION) {
+    plugins.splice(0, 0, new CleanWebpackPlugin({
+      cleanStaleWebpackAssets     : true,
+      cleanOnceBeforeBuildPatterns: [ output.path ],
+    }));
+  }
+
+  return plugins.concat([
     new webpack.DefinePlugin({
       env : JSON.stringify(env),
     }),
+
+    // new I18nPlugin(languageConfig, optionsObj),
 
     new MiniCssExtractPlugin({
       filename : 'styles/[name].css',
@@ -186,64 +192,71 @@ function $GetPluginsList({ apps, mode, env }) {
       maxChunks : 5,
     }),
 
-    $GetHtmlWebpackPlugin()
-  ];
+    $GetHtmlWebpackPlugin(),
+
+    ...debuggerPlugins
+  ]);
 }
 
 function $GetEntries({ apps, context, mode }) {
   // console.log(apps, context, mode);
-  const entryFile = path.join(context, apps[0]);
+  const entryFile = path.join(context, apps[0], 'index.jsx');
+
 
   return mode === CONST_DEVELOPMENT ? [ CONST_WEBPACK_HOT, entryFile ] : entryFile;
 }
 
-function $GetOtimization() {
+function $GetOtimization(mode) {
+  console.log(mode);
+
   return {
-    noEmitOnErrors   : true,
-    minimize         : false,
+    minimize         : true,
     namedChunks      : true,
     runtimeChunk     : 'single', // 'multiple'
     removeEmptyChunks: true,
+    noEmitOnErrors   : true,
     splitChunks      : {
       // 静态资源缓存
       // test, priority and reuseExistingChunk can only be configured on cache group level.
       cacheGroups : {
         // 提取 node_modules 里面依赖的代码
         'framework.depend' : {
-          name     : 'framework.depend',
-          // filename : 'framework/[name].[contenthash:6].js',
-          test     : /[\\/]node_modules[\\/]/,
-          chunks   : 'all',
-          minChunks: 2, // 2个共享以及以上都提取
-          minSize  : 0,
-          priority : -10, // 优先级
+          name              : 'framework.depend',
+          filename          : `js/[name]${mode === CONST_DEVELOPMENT ? '' : '.[contenthash:8]'}.js`,
+          test              : /[\\/]node_modules[\\/]/,
+          chunks            : 'all',
+          minChunks         : 1, // 2个共享以及以上都提取
+          minSize           : 0,
+          priority          : -10, // 优先级
+          reuseExistingChunk: true,
+          enforce           : true,
         },
 
         // 提出每个模块公共的代码
         'framework.commons' : {
           name              : 'framework.commons',
-          // filename          : 'framework/[name].[contenthash:6].js',
-          enforce           : true,
+          filename          : `js/[name]${mode === CONST_DEVELOPMENT ? '' : '.[contenthash:8]'}.js`,
           test              : /\.js$/,
           chunks            : 'initial',
-          minChunks         : 2, // 两个共享以及以上都提取,
+          minChunks         : 1, // 两个共享以及以上都提取,
           minSize           : 0,
           priority          : -20, // 优先级
           reuseExistingChunk: true,
           enforce           : true,
         },
 
-        // css : {
-        //   name              : 'styles',
-        //   test              : /\.css$/,
-        //   minChunks         : 1,
-        //   minSize           : 0,
-        //   priority          : -20,
-        //   chunks            : 'initial',
-        //   chunks            : 'all',
-        //   reuseExistingChunk: true,
-        //   enforce           : true,
-        // },
+        'css' : {
+          name              : 'styles',
+          // filename          : '',
+          test              : /\.css$/,
+          chunks            : 'initial',
+          minChunks         : 1,
+          minSize           : 0,
+          priority          : -20,
+          // chunks            : 'all',
+          reuseExistingChunk: true,
+          enforce           : true,
+        },
       },
     },
   };
@@ -272,16 +285,13 @@ export default ({
   const module = {};
   module.rules = $GetModuleRules(mode);
 
-  const optimization = $GetOtimization();
+  const optimization = $GetOtimization(mode);
 
   const resolve = {
     mainFiles : [ 'index', 'main' ],
     extensions: [ '.jsx', '.js', '.json' ],
-    modules   : [
-      path.join(context, 'src/library'),
-      'node_modules'
-    ],
-    alias : {
+    modules   : [ path.join(context, 'src/library'), 'node_modules' ],
+    alias     : {
       'src'   : path.join(context, 'src'),
       '@env'  : path.join(context, 'src/env'),
       '@utils': path.join(context, 'src/utils'),
@@ -290,9 +300,6 @@ export default ({
     },
   };
 
-  // optimization = {};
-  // output = {};
-  // entry = {};
   return {
     mode,
     context,
@@ -302,9 +309,9 @@ export default ({
     module,
     optimization,
     plugins,
-    performance: {},
-    target     : 'web',
-    bail       : true,
-    devtool    : 'cheap-module-eval-source-map',
+    // performance: {},
+    target : 'web',
+    bail   : false,
+    devtool: mode === CONST_DEVELOPMENT ? 'cheap-module-eval-source-map' : 'none',
   };
 };
