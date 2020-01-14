@@ -2,4 +2,4 @@
 
 require('dotenv').config();
 
-require('../release/main');
+require('../release/main.js');

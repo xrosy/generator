@@ -1,6 +1,6 @@
 {
   "name": "@xrosy/generator",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "author": "ChenZhenyuan <jason@chenzhenyuan.com>",
   "license": "MIT",
   "description": "The generator of xrosy.",
@@ -10,7 +10,7 @@
     "xrosy",
     "generator"
   ],
-  "main": "./release/main.js",
+  "main": "bin/xrosy",
   "files": [
     "bin/",
     "release/",
