@@ -3,7 +3,7 @@
 import xrosy from '@xrosy/command';
 
 import * as packageInfo from '../package.json';
-import { initActivity, buildActivity, serverActivity } from './WPAgent.js';
+import { initActivity, buildActivity } from './WPAgent.js';
 import { DEFAULT_ENV, SERVER_PORT } from './constant.js';
 
 
@@ -48,12 +48,6 @@ xrosy
   // .option('-N, --app-names     <app_names>', '指定需要打包的app模块名称。（默认: --app-name=all）')
   .option('*', 'sss')
   .action(buildActivity);
-
-// xrosy
-//   .command('*')
-//   .action(function(env) {
-//     console.log('deploying "%s"', env);
-//   });
 
 xrosy.version(packageInfo.version, '-v, --version', `查看版本号 (v${packageInfo.version})`).parse(process.argv);
 

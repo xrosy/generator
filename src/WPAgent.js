@@ -8,8 +8,8 @@ import webpack                                                           from 'w
 
 import { CONST_DEVELOPMENT, CONST_PRODUCTION, DEFAULT_ENV, SERVER_PORT } from './constant';
 import * as utils                                                        from './utils.js';
-import server                                                            from './server';
 import webpackConfigs                                                    from './WPConfigs.js';
+import server                                                            from './WPServer.js';
 
 
 const console = utils.logger;
@@ -28,8 +28,6 @@ export const buildActivity = (work = '.', {
 
   ...args
 }) => {
-  console.log(work);
-
   const wpConfigs = webpackConfigs({ env, mode, productDirectory: work });
   const wpCompiler = webpack({
     ...wpConfigs,
