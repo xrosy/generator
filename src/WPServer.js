@@ -28,10 +28,6 @@ export default ({
   const isProduction = mode === CONST_PRODUCTION;
   const rootPath = isProduction ? wpCompiler.options.output.path : wpCompiler.options.output.publicPath;
   const server = express();
-  const proxyMiddleware = proxy({
-    target     : `http://127.0.0.1:${port}`,
-    pathRewrite: { '^/.*': '/index.html' },
-  });
 
   server.engine('html', require('express-art-template'));
   server.set('view engine', 'html');
@@ -40,13 +36,26 @@ export default ({
   console.log('mode        :', mode);
   console.log('isService   :', isService);
   console.log('isProduction:', isProduction);
-
+  console.log('rootPath    :', rootPath);
 
   if (isService === false && isProduction === true) {
     wpCompiler.run((err, stats) => {
       const { startTime, endTime } = stats;
       console.success(`Time     : ${(endTime - startTime) / 1000} 秒`);
       console.success('Successful！');
+    });
+
+    server.use(express.static(rootPath));
+
+    server.use([ '/' ], (req, res, next) => {
+      console.log(path.resolve(rootPath, 'index.html'));
+      if (existsSync(path.resolve(rootPath, 'index.html')) === false) {
+        next();
+
+        return;
+      }
+
+      res.render('index');
     });
   }
   else if (isProduction === false) {
@@ -60,21 +69,13 @@ export default ({
     }));
 
     server.use(wpHotMiddleware(wpCompiler));
+    server.use(express.static(rootPath));
+
+    server.use(proxy({
+      target     : `http://127.0.0.1:${port}`,
+      pathRewrite: { '^/.*': '/index.html' },
+    }));
   }
-
-  server.use(express.static(rootPath));
-
-  // server.use(proxyMiddleware);
-
-  server.use([ '/' ], (req, res, next) => {
-    if (existsSync(path.resolve(rootPath, 'index.html')) === false) {
-      next();
-
-      return;
-    }
-
-    res.render('index');
-  });
 
   /*
   server.use('/favicon.ico', (req, res) => {

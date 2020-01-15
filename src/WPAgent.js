@@ -31,12 +31,11 @@ export const buildActivity = (work = '.', {
   const wpConfigs = webpackConfigs({ env, mode, productDirectory: work });
   const wpCompiler = webpack({
     ...wpConfigs,
-    stats : 'minimal',
-
+    stats : false,
   });
 
 
-  switch (mode.toLowerCase()) {
+  switch (mode) {
     case 'dev':
     case 'build': {
       console.clear();
@@ -47,15 +46,14 @@ export const buildActivity = (work = '.', {
       console.debug('port     :', `${port}`);
 
 
-      if (mode.toLowerCase() === 'build' && service === false)  {
+      if (mode === 'build' && service === false)  {
         // return console.log(wpConfigs);
 
         wpCompiler.run((err, stats) => {
           const { startTime, endTime } = stats;
 
-          process.stdout.write(stats.toString({ colors: true, chunks: true }));
+          process.stdout.write(stats.toString({ chunks: false, colors: true }));
           process.stdout.write('\n');
-
           process.stdout.write(`Time     : ${(endTime - startTime) / 1000} 秒\n`);
           process.stdout.write('Compile successful！\n');
         });
@@ -82,7 +80,6 @@ export const buildActivity = (work = '.', {
         mode : mode === CONST_PRODUCTION ? CONST_PRODUCTION : CONST_DEVELOPMENT,
 
         ...args,
-
         isService : true,
       });
 
