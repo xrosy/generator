@@ -9,7 +9,7 @@ XRosy.Com FE Packing Tool.
 ### Usage
 
 ```text
-Usage: xrosy <commands [options]>
+Usage: rox <commands [options]>
 
 Options:
   -v, --version                   输出版本号 (v0.1.0)

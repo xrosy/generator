@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+
+const path = require('path');
+
+require('dotenv').config();
+
+require(path.join(__dirname, '../release/index.js'));

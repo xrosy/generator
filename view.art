@@ -9,5 +9,7 @@
     <title>Application</title>
   </head>
 
-  <body><div id="rootContainer"></div></body>
+  <body>
+    <div id="rootContainer"></div>
+  </body>
 </html>

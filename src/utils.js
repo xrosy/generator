@@ -7,15 +7,16 @@ import * as packageInfo from '../package.json';
 
 
 export const PKG_NAME = packageInfo.name;
-
 export const PKG_VERSION = packageInfo.version;
 
+
 export const getResourceAbsolutePath = () => path.join(__dirname, '../resource');
+
 
 export const logger = new Cat({
   error  : '#redBright(:i-error)',
   warn   : '#yellowBright(:i-warn)',
-  success: '#greenBright(:i-success) %s',
+  success: '#greenBright(:i-success %s)',
   info   : '#blueBright(:i-info)',
   log    : ':i-log',
   primary: '#greenBright(\u27a5 %s)',

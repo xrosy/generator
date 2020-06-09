@@ -6,7 +6,10 @@
   "description": "The generator of xrosy.",
   "repository": "https://git.chenzhenyuan.com/xrosy/generator",
   "private": false,
-  "keywords": [ "xrosy", "generator" ],
+  "keywords": [
+    "xrosy",
+    "generator"
+  ],
   "main": "release/index.js",
   "files": [
     "bin/",
@@ -24,6 +27,7 @@
     "README.md"
   ],
   "bin": {
+    "rox": "bin/xrosy",
     "xrosy": "bin/xrosy"
   },
   "scripts": {
@@ -35,12 +39,11 @@
     "dev:server": "babel-node src/main.js server --server-port=9000 --env=$TERM_PROGRAM"
   },
   "dependencies": {
-    "@babel/core": "^7.7.4",
+    "@babel/core": "^7.8.3",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
-    "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "@babel/preset-react": "^7.7.4",
-    "@babel/runtime": "^7.7.4",
+    "@babel/runtime": "^7.8.3",
     "@babel/runtime-corejs3": "^7.7.4",
     "@xrosy/cat": "^0.2.2",
     "@xrosy/command": "^0.1.0",
@@ -50,7 +53,6 @@
     "axios": "^0.19.0",
     "babel-loader": "^8.0.6",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-minify": "^0.5.1",
     "classnames": "^2.2.6",
     "clean-webpack-plugin": "^2.0.2",
     "connect-history-api-fallback": "^1.6.0",
@@ -105,6 +107,12 @@
   "devDependencies": {
     "@babel/cli": "^7.7.4",
     "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "babel-preset-minify": "^0.5.1",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0-beta.2",
+    "gulp-uglify": "^3.0.2",
+    "gulp-watch": "^5.0.1",
     "moment": "^2.24.0"
   }
 }

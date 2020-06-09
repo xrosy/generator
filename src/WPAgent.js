@@ -11,7 +11,6 @@ import * as utils                                                        from '.
 import webpackConfigs                                                    from './WPConfigs.js';
 import server                                                            from './WPServer.js';
 
-
 const console = utils.logger;
 const PRO_DIRECTORY_LIST = [ 'library', 'documents', 'static', 'src', 'src/apps', 'src/configs', 'src/server', 'src/utils', 'test' ];
 
@@ -93,11 +92,7 @@ export const buildActivity = (work = '.', {
 
 
 /* 导出 init 接口 */
-export const initActivity = (directory, {
-  parent: { _version: version },
-  force = false,
-  recursive = true,
-}) => {
+export const initActivity = (directory, { parent: { _version: version }, force = false, recursive = true }) => {
   const resource = utils.getResourceAbsolutePath();
   const project = path.resolve('.', directory);
 
@@ -128,7 +123,7 @@ export const initActivity = (directory, {
       console.success('创建：', path.join(directory, file));
     }
     catch (err) {
-      console.error('失败：', path.join(directory, file), String(err.code).toUpperCase() === 'EEXIST' ? '\t#redBright([已存在])' : '');
+      console.error('失败：', path.join(directory, file));
     }
   });
 
