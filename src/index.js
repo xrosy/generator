@@ -1,5 +1,5 @@
 /* eslint-disable no-multi-spaces */
-import xrosy from '@xrosy/command';
+import rox from '@xrosy/command';
 
 import * as packageInfo from '../package.json';
 import { initActivity, buildActivity } from './WPAgent.js';
@@ -14,21 +14,21 @@ const OPT_SERVER_AGENT = [ '--api-server <api uri>', '设置 api 代理地址' ]
 // const DEFAULT_ENV = 'dev';
 // const DEFAULT_SERVICE_PORT = 3000;
 
-xrosy
+rox
   .command('init <directory>')
   .description('初始化工程目录')
   .option('-f, --force', '如果目录存在，强制使用新的配置初始化')
   .action(initActivity);
 
 
-xrosy
+rox
   .command('dev [workspace]')
   .description('开发模式')
   .option(...OPT_ENV)
   .option(...OPT_SERVER_PORT)
   .action(buildActivity);
 
-xrosy
+rox
   .command('server [workspace]')
   .option(...OPT_ENV)
   .option(...OPT_SERVER_PORT)
@@ -37,7 +37,7 @@ xrosy
   .action(buildActivity);
 
 
-xrosy
+rox
   .command('build [workspace]')
   .description('构建模式')
   .option(...OPT_ENV)
@@ -48,9 +48,9 @@ xrosy
   .option('*', 'sss')
   .action(buildActivity);
 
-xrosy.version(packageInfo.version, '-v, --version', `查看版本号 (v${packageInfo.version})`).parse(process.argv);
+rox.version(packageInfo.version, '-v, --version', `查看版本号 (v${packageInfo.version})`).parse(process.argv);
 
 /* ---- */
 if (!process.argv.slice(2).length) {
-  xrosy.help();
+  rox.help();
 }
