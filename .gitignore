@@ -89,6 +89,6 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
-oulate-example/
-
+# product _example
 release/
+_example/

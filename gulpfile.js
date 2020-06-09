@@ -6,7 +6,7 @@ const watch = require('gulp-watch');
 let count = 0;
 
 
-task('watch', function () {
+task('dev', function () {
   return watch([ './src/**' ], function () {
     const dateVo = new Date();
     const dateOpt = { hour12: false };
