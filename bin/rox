@@ -3,4 +3,4 @@
 const path = require('path');
 
 require('dotenv').config();
-require(path.join(__dirname, '../release/index.js'));
+require(path.join(__dirname, '../build/main.js'));
