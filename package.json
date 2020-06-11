@@ -1,9 +1,9 @@
 {
-  "name": "@xrosy/generator",
-  "version": "0.1.11",
+  "name": "@xrosy/rox-cli",
+  "version": "0.2.0",
   "author": "ChenZhenyuan <jason@chenzhenyuan.com>",
   "license": "MIT",
-  "description": "The generator of xrosy.",
+  "description": "The generator of rox.",
   "repository": "https://git.chenzhenyuan.com/xrosy/generator",
   "private": false,
   "keywords": [

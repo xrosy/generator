@@ -48,7 +48,9 @@ rox
   .option('*', 'sss')
   .action(buildActivity);
 
-rox.version(packageInfo.version, '-v, --version', `查看版本号 (v${packageInfo.version})`).parse(process.argv);
+rox
+  .version(packageInfo.version, '-v, --version', `查看版本号 (v${packageInfo.version})`)
+  .parse(process.argv);
 
 /* ---- */
 if (!process.argv.slice(2).length) {

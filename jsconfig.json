@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "baseUrl": "",
+    "jsx": "react",
+    "experimentalDecorators": true,
+
+    // 配置可以跳转的定义
+    "paths": {
+      "src/*"    : ["src/*"],
+      "app"      : ["src/app"],
+      "app/*"    : ["src/app/*"],
+      "library"  : ["src/library"],
+      "library/*": ["src/library/*"],
+      "@utils"   : ["src/utils"],
+      "@utils/*" : ["src/utils/*"],
+      "@env"     : ["src/env"],
+      "@env/*"   : ["src/env/*"]
+    }
+  }
+}
